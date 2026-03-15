@@ -1,0 +1,34 @@
+{
+  "appId": "com.notara.app",
+  "buildVersion": "1.0.0.0",
+  "productName": "Notara",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**",
+    "dist-electron/**",
+    "assets/**"
+  ],
+  "asar": true,
+  "compression": "maximum",
+  "win": {
+    "target": ["appx", "nsis"],
+    "icon": "assets/icon.ico"
+  },
+  "appx": {
+    "identityName": "51074JacobMollan.Notara",
+    "publisher": "CN=10EDC7E2-241A-4F52-8B94-FD44EDF80BBF",
+    "publisherDisplayName": "Jacob Mollan"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "category": "public.app-category.productivity",
+    "icon": "assets/icon.icns"
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "category": "Utility",
+    "icon": "assets/icon.png"
+  }
+}
