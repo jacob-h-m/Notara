@@ -7,6 +7,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -40,3 +42,10 @@ jobs:
         with:
           name: release-artifacts-${{ matrix.os }}
           path: release/**/*
+
+      - name: Create GitHub Release and attach installers
+        if: matrix.os == 'ubuntu-latest'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          files: release/**/*
