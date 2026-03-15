@@ -39,14 +39,11 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Start Vite preview server (background)
-        run: npm run preview -- --port 5173 &
-
-      - name: Wait for preview server
-        run: npx wait-on http://localhost:5173 --timeout 60000
-
-      - name: Run Playwright smoke test
-        run: npx playwright test tests/smoke/ipc-note-lifecycle.spec.js --config=playwright.config.js
+      - name: Run preview server and Playwright smoke test
+        run: |
+          nohup npm run preview -- --port 5173 >/dev/null 2>&1 &
+          npx wait-on http://localhost:5173 --timeout 60000
+          npx playwright test tests/smoke/ipc-note-lifecycle.spec.js --config=playwright.config.js
         env:
           CI: 'true'
 
