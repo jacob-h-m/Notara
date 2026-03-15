@@ -40,12 +40,12 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Start Vite dev server (background)
-        run: npx vite --port 5173 &
+        run: npm run dev &
         env:
           VITE_DEV_SERVER_URL: ''
 
       - name: Wait for dev server
-        run: npx wait-on http://127.0.0.1:5173 --timeout 30000
+        run: npx wait-on http://127.0.0.1:5173 --timeout 60000
 
       - name: Run Playwright smoke test
         run: npx playwright test tests/smoke/ipc-note-lifecycle.spec.js --config=playwright.config.js
