@@ -105,6 +105,26 @@ export default function App() {
     }
   }, [])
 
+  // Prevent default drag/drop navigation and suppress contextmenu on non-editable chrome
+  useEffect(() => {
+    const prevent = (e: Event) => { e.preventDefault(); };
+    const onContext = (e: Event) => {
+      const t = e.target as HTMLElement | null
+      if (!t) return
+      // Allow contextmenu on explicit allow-list (inputs, textareas, code editor, elements marked .allow-context)
+      if (t.closest('input,textarea,.cm-editor,.allow-context')) return
+      e.preventDefault()
+    }
+    window.addEventListener('dragover', prevent)
+    window.addEventListener('drop', prevent)
+    window.addEventListener('contextmenu', onContext, true)
+    return () => {
+      window.removeEventListener('dragover', prevent)
+      window.removeEventListener('drop', prevent)
+      window.removeEventListener('contextmenu', onContext, true)
+    }
+  }, [])
+
   // Keyboard shortcuts
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {

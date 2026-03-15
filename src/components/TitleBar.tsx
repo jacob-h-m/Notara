@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
+// Resolve asset URL in a Vite-friendly way so it works in dev and packaged builds
+const logoUrl = new URL('../../assets/logo.svg', import.meta.url).href
+
 type TitleBarProps = {
   /** Basename of the active note, displayed in the centre. */
   activeNote?: string
@@ -32,8 +35,20 @@ export default function TitleBar({ activeNote, menuContent }: TitleBarProps) {
         className="no-drag titlebar-left flex items-center shrink-0"
         style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
       >
-        <div className="titlebar-brand flex items-center gap-2 px-3 py-1">
-          <img src="/assets/logo.svg" alt="Notara" className="h-5 w-5 shrink-0" />
+        <div
+          className="titlebar-brand flex items-center gap-2 px-3 py-1"
+          onContextMenu={(e) => e.preventDefault()}
+          tabIndex={-1}
+          aria-hidden
+        >
+          <img
+            src={logoUrl}
+            alt="Notara"
+            className="h-5 w-5 shrink-0"
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
+            aria-hidden
+          />
         </div>
         {menuContent && (
           <div className="titlebar-menu flex items-center px-1">

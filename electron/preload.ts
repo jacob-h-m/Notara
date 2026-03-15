@@ -63,6 +63,7 @@ const _api = {
   // ── Shell / OS operations -----------------------------------------------
   openNotesFolder: (): Promise<void> => ipcRenderer.invoke('shell:open-notes-folder'),
   openAppDataFolder: (): Promise<void> => ipcRenderer.invoke('shell:open-app-data-folder'),
+  openThemesFolder: (): Promise<void> => ipcRenderer.invoke('shell:open-themes-folder'),
   openExternal: (url: string): Promise<void> => ipcRenderer.invoke('shell:open-external', url),
   saveNoteAs: (defaultFilename: string, content: string): Promise<string | null> =>
     ipcRenderer.invoke('dialog:save-note-as', defaultFilename, content),

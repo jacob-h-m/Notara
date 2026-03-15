@@ -154,6 +154,32 @@ function renderMarkdown(md: string): string {
   // Memoize rendered HTML to avoid recomputing markdown on unrelated renders
   const rendered = useMemo(() => renderMarkdown(content), [content])
 
+  // Prevent images in preview from being draggable and intercept anchor clicks
+  useEffect(() => {
+    const root = scrollRef.current
+    if (!root) return
+    function onDragStart(e: Event) {
+      const t = e.target as HTMLElement | null
+      if (t && t.tagName === 'IMG') e.preventDefault()
+    }
+    function onClick(e: MouseEvent) {
+      const el = (e.target as HTMLElement)
+      const a = el.closest('a') as HTMLAnchorElement | null
+      if (a && a.href) {
+        e.preventDefault()
+        void window.api.openExternal(a.href).catch(console.error)
+        return
+      }
+      // If preview uses .preview-link spans, they are non-navigable by design
+    }
+    root.addEventListener('dragstart', onDragStart)
+    root.addEventListener('click', onClick)
+    return () => {
+      root.removeEventListener('dragstart', onDragStart)
+      root.removeEventListener('click', onClick)
+    }
+  }, [])
+
   return (
     <div className={`flex flex-col overflow-hidden bg-preview ${className}`} style={style}>
       {/* Header bar */}

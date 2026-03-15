@@ -118,6 +118,8 @@ export type NotaraAPI = {
   openNotesFolder: () => Promise<void>
   /** Open the app data folder (state.json, etc.) in the system file manager. */
   openAppDataFolder: () => Promise<void>
+  /** Open the themes folder (APP_ROOT/themes) in the system file manager. */
+  openThemesFolder: () => Promise<void>
   /** Open a URL in the system default browser. Only whitelisted URLs allowed. */
   openExternal: (url: string) => Promise<void>
   /** Show a native save dialog and write content to the chosen path.

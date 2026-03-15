@@ -480,7 +480,9 @@ select,
 /* Titlebar layout helpers */
 .titlebar-left { display: flex; align-items: center; gap: 4px; }
 .titlebar-brand { display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; }
-.titlebar-brand:hover { background: color-mix(in srgb, var(--hover-overlay) 60%, transparent); }
+/* Remove hover visual and cursor for titlebar brand (chrome) */
+.titlebar-brand:hover { background: transparent; }
+.titlebar-brand, .titlebar-brand img { cursor: default; -webkit-user-drag: none; user-drag: none; user-select: none; -webkit-user-select: none; }
 .titlebar-menu { display: flex; align-items: center; gap: 6px; padding-left: 6px; }
 .titlebar-menu > * { margin-left: 6px; }
 

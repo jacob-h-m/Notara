@@ -8,6 +8,9 @@
 
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
+
+// Resolve asset URL in a Vite-friendly way so it works in dev and packaged builds
+const logoUrl = new URL('../../assets/logo.svg', import.meta.url).href
 import type { AppState, AppSettings, EditorSettings } from '../types'
 import { DEFAULT_THEME_TOKENS } from '../hooks/useUI'
 
@@ -402,6 +405,20 @@ function AppearanceTab({
           </button>
         ))}
         </div>
+        <div className="mt-3">
+          <button
+            onClick={async () => {
+              try {
+                await window.api.openThemesFolder()
+              } catch (err) {
+                console.error('openThemesFolder failed:', err)
+              }
+            }}
+            className="btn btn-ghost text-sm px-3 py-1"
+          >
+            Open themes folder
+          </button>
+        </div>
       </CollapsibleSection>
 
       <CollapsibleSection title="Motion">
@@ -528,8 +545,14 @@ function AboutTab() {
 
   return (
     <div className="flex flex-col items-center py-4 text-center">
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl" style={{ background: 'var(--surface-elevated)', boxShadow: '0 0 0 1px var(--border-subtle)' }}>
-        <img src="/assets/logo.svg" alt="" className="h-8 w-8" />
+      <div
+        className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl"
+        style={{ background: 'var(--surface-elevated)', boxShadow: '0 0 0 1px var(--border-subtle)' }}
+        onContextMenu={(e) => e.preventDefault()}
+        tabIndex={-1}
+        aria-hidden
+      >
+        <img src={logoUrl} alt="" className="h-8 w-8" draggable={false} onDragStart={e => e.preventDefault()} aria-hidden />
       </div>
       <h2 className="text-lg font-semibold text-on-surface">Notara</h2>
       <p className="mt-1 text-xs text-muted">Version {version}</p>

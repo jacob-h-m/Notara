@@ -409,6 +409,11 @@ ipcMain.handle('shell:open-app-data-folder', async (): Promise<void> => {
   await shell.openPath(APP_ROOT)
 })
 
+/** Open the themes folder in the system file manager. */
+ipcMain.handle('shell:open-themes-folder', async (): Promise<void> => {
+  await shell.openPath(THEMES_DIR)
+})
+
 /** Open a URL in the system default browser. Only allowed hostnames accepted. */
 const ALLOWED_HOSTS = ['jacobmollan.xyz', 'notara.jacobmollan.xyz', 'github.com']
 ipcMain.handle('shell:open-external', async (_event: IpcMainInvokeEvent, url: string): Promise<void> => {

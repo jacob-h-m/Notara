@@ -40,5 +40,15 @@ Thumbs.db
 .env.*
 !.env.example
 
-# Private tools
-tools/make-icons.js
+# Private tools — ignore all private tooling
+tools/
+
+# Tests — ignore test outputs and temp files
+tests/
+
+# Release & audit notes
+release_checklist.md
+security_audit.md
+
+# Temporary packaging output
+release-temp/
