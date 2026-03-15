@@ -27,7 +27,8 @@
       "dist/**",
       "dist-electron/**"
     ],
-    "asar": false,
+    "asar": true,
+    "compression": "maximum",
     "win": {
       "target": ["appx", "nsis"]
     },

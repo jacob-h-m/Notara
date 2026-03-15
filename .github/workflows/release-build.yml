@@ -1,4 +1,6 @@
 name: Build release artifacts on tag
+permissions:
+  contents: write
 
 on:
   push:
@@ -7,8 +9,6 @@ on:
 
 jobs:
   build:
-    permissions:
-      contents: write
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -23,29 +23,66 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.19.0
+          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
 
-      - name: Build renderer and app
-        run: |
-          npm run build
+      - name: TypeScript typecheck
+        run: npm run typecheck
+
+      - name: Build renderer and Electron
+        run: npm run build
 
       - name: Build native installers
-        run: |
-          # electron-builder will build platform-specific artifacts on the matching runner
-          npx electron-builder --publish never
+        run: npx electron-builder --publish never
+        env:
+          # Placeholder – set these secrets in repo Settings to enable code signing.
+          # Windows: CSC_LINK (base64 PFX), CSC_KEY_PASSWORD
+          # macOS:   CSC_LINK (base64 .p12), CSC_KEY_PASSWORD, APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-artifacts-${{ matrix.os }}
+          name: release-${{ matrix.os }}
           path: release/**/*
+          if-no-files-found: warn
 
-      - name: Create GitHub Release and attach installers
-        if: matrix.os == 'ubuntu-latest'
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Create GitHub Release
+    permissions:
+      contents: write
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Collect installer files into one directory
+        run: |
+          mkdir -p release
+          find artifacts -type f \( \
+            -name '*.exe' -o -name '*.msi' -o -name '*.appx' -o \
+            -name '*.msix' -o -name '*.dmg' -o -name '*.AppImage' -o \
+            -name '*.deb' -o -name '*.rpm' -o -name '*.zip' \
+          \) -exec cp {} release/ \;
+          echo 'Collected files:'
+          ls -lh release/
+
+      - name: Publish GitHub Release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref_name }}
-          files: release/**/*
+          name: ${{ github.ref_name }}
+          bodyFile: CHANGELOG.md
+          allowUpdates: true
+          files: release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
