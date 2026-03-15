@@ -343,34 +343,34 @@ ipcMain.handle('fs:list-notes', (): string[] => {
 })
 
 /** Read a note's content by filename. Validates path stays inside NOTES_DIR. */
-ipcMain.handle('fs:read-note', (_event: IpcMainInvokeEvent, filename: string): string => {
+ipcMain.handle('fs:read-note', (_event: IpcMainInvokeEvent, filename: unknown): string => {
   try {
     const safePath = join(NOTES_DIR, sanitizeFilename(filename))
     assertInsideNotesDir(safePath)
     if (!existsSync(safePath)) return ''
     return readFileSync(safePath, 'utf-8')
   } catch (err) {
-    console.warn('[main] fs:read-note failed for', filename, err)
+    console.warn('[main] fs:read-note error:', (err as Error).message)
     return ''
   }
 })
 
 /** Write (or create) a note by filename. */
-ipcMain.handle('fs:write-note', (_event: IpcMainInvokeEvent, filename: string, content: string): void => {
+ipcMain.handle('fs:write-note', (_event: IpcMainInvokeEvent, filename: unknown, content: unknown): void => {
   const safePath = join(NOTES_DIR, sanitizeFilename(filename))
   assertInsideNotesDir(safePath)
-  writeFileSync(safePath, content, 'utf-8')
+  writeFileSync(safePath, assertSafeContent(content, 'content'), 'utf-8')
 })
 
 /** Delete a note by filename. No-op if the file doesn't exist. */
-ipcMain.handle('fs:delete-note', (_event: IpcMainInvokeEvent, filename: string): void => {
+ipcMain.handle('fs:delete-note', (_event: IpcMainInvokeEvent, filename: unknown): void => {
   const safePath = join(NOTES_DIR, sanitizeFilename(filename))
   assertInsideNotesDir(safePath)
   if (existsSync(safePath)) unlinkSync(safePath)
 })
 
 /** Create a new empty note (no-op if it already exists). */
-ipcMain.handle('fs:create-note', (_event: IpcMainInvokeEvent, filename: string): void => {
+ipcMain.handle('fs:create-note', (_event: IpcMainInvokeEvent, filename: unknown): void => {
   const safePath = join(NOTES_DIR, sanitizeFilename(filename))
   assertInsideNotesDir(safePath)
   if (!existsSync(safePath)) writeFileSync(safePath, '', 'utf-8')
@@ -383,13 +383,13 @@ ipcMain.handle('fs:create-note', (_event: IpcMainInvokeEvent, filename: string):
  */
 ipcMain.handle(
   'fs:rename-note',
-  (_event: IpcMainInvokeEvent, oldFilename: string, newFilename: string): void => {
+  (_event: IpcMainInvokeEvent, oldFilename: unknown, newFilename: unknown): void => {
     const oldPath = join(NOTES_DIR, sanitizeFilename(oldFilename))
     const newPath = join(NOTES_DIR, sanitizeFilename(newFilename))
     assertInsideNotesDir(oldPath)
     assertInsideNotesDir(newPath)
-    if (!existsSync(oldPath)) throw new Error(`Note not found: ${oldFilename}`)
-    if (existsSync(newPath))  throw new Error(`A note named "${newFilename}" already exists`)
+    if (!existsSync(oldPath)) throw new Error(`Note not found: ${String(oldFilename)}`)
+    if (existsSync(newPath))  throw new Error(`A note named "${String(newFilename)}" already exists`)
     renameSync(oldPath, newPath)
   }
 )
@@ -472,7 +472,10 @@ ipcMain.handle('state:load', (): unknown => {
 
 /** Persist the app state to state.json (pretty-printed). */
 ipcMain.handle('state:save', (_event: IpcMainInvokeEvent, state: unknown): void => {
-  writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8')
+  // Validate the blob is serialisable JSON and within size budget before writing.
+  const serialised = JSON.stringify(state, null, 2)
+  assertSafeContent(serialised, 'state')
+  writeFileSync(STATE_FILE, serialised, 'utf-8')
 })
 
 // ─── IPC: Themes ───────────────────────────────────────────────────────────
@@ -532,12 +535,46 @@ ipcMain.handle('theme:write', (_event: IpcMainInvokeEvent, name: string, data: o
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// ─── Validation constants ────────────────────────────────────────────────────
+const MAX_FILENAME_LENGTH = 200
+/** Maximum bytes accepted for note content or persisted state. 10 MB. */
+const MAX_CONTENT_BYTES   = 10 * 1024 * 1024
+
 /**
- * Strip path separators and traversal sequences from a filename.
- * Prevents directory traversal when constructing file paths from user input.
+ * Assert that `name` is a safe bare filename.
+ *
+ * Rules (all must pass; throws otherwise):
+ *   • Must be a non-empty string.
+ *   • Length ≤ MAX_FILENAME_LENGTH characters.
+ *   • Must end in `.md` or `.txt`.
+ *   • Must not contain path separators (`/`, `\`) or null bytes.
+ *   • Must not contain `..` sequences.
+ *   • Must not start with a dot (hidden files / `.git` etc.).
+ *
+ * This function THROWS rather than silently sanitising so callers can
+ * surface the error to the user. It is always called before
+ * `assertInsideNotesDir` as a fast first gate.
  */
-function sanitizeFilename(name: string): string {
-  return name.replace(/[/\\?%*:|"<>]/g, '').replace(/\.\./g, '')
+function sanitizeFilename(name: unknown): string {
+  if (typeof name !== 'string' || name.trim() === '') {
+    throw new Error('Filename must be a non-empty string')
+  }
+  if (name.length > MAX_FILENAME_LENGTH) {
+    throw new Error(`Filename too long (max ${MAX_FILENAME_LENGTH} chars)`)
+  }
+  if (/[\/\\\x00]/.test(name)) {
+    throw new Error('Filename must not contain path separators or null bytes')
+  }
+  if (name.includes('..')) {
+    throw new Error('Filename must not contain traversal sequences (..)')
+  }
+  if (name.startsWith('.')) {
+    throw new Error('Filename must not start with a dot')
+  }
+  if (!/\.(md|txt)$/i.test(name)) {
+    throw new Error('Filename must end in .md or .txt')
+  }
+  return name
 }
 
 /**
@@ -549,4 +586,16 @@ function assertInsideNotesDir(resolvedPath: string): void {
   if (!resolvedPath.startsWith(prefix) && resolvedPath !== NOTES_DIR) {
     throw new Error('Access denied: path escapes notes directory')
   }
+}
+
+/**
+ * Assert that a value is a string and within the allowed byte budget.
+ * Used to validate content / state blobs arriving from the renderer.
+ */
+function assertSafeContent(value: unknown, label: string): string {
+  if (typeof value !== 'string') throw new Error(`${label} must be a string`)
+  if (Buffer.byteLength(value, 'utf-8') > MAX_CONTENT_BYTES) {
+    throw new Error(`${label} exceeds maximum allowed size`)
+  }
+  return value
 }
