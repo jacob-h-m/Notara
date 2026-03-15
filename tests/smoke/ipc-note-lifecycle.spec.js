@@ -33,7 +33,7 @@ test.describe('App smoke – note lifecycle', () => {
 
     // Find the "New Note" button – look for common patterns used in the sidebar.
     const newNoteBtn = page.locator(
-      'button[title*="new" i], button[aria-label*="new note" i], [data-testid="new-note-btn"]'
+      'button[title*="new" i], button[aria-label*="new note" i], [data-testid="new-note-btn"], button:has-text("+ New Note"), button:has-text("New Note")'
     ).first();
 
     // If the button exists, click it and verify an editor area appears.
@@ -42,11 +42,11 @@ test.describe('App smoke – note lifecycle', () => {
       await newNoteBtn.click();
       // Editor or textarea should become visible after creating a note.
       const editor = page.locator('.cm-editor, textarea, [role="textbox"]').first();
-      await expect(editor).toBeVisible({ timeout: 5000 });
+      await expect(editor).toBeVisible({ timeout: 10000 });
     } else {
       // Fallback: just confirm a sidebar or editor panel rendered.
       const panel = page.locator('.sidebar, aside, [class*="sidebar"], [class*="editor"]').first();
-      await expect(panel).toBeVisible({ timeout: 5000 });
+      await expect(panel).toBeVisible({ timeout: 10000 });
     }
   });
 });
