@@ -1,7 +1,7 @@
 {
   "name": "notara",
   "version": "1.0.0",
-  "author": "Jacob Mollan",
+  "author": "Jacob Mollan <jacob@notara.app>",
   "description": "Notara v2 — local-only desktop notes app",
   "main": "dist-electron/main.js",
   "scripts": {
