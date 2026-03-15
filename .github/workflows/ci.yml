@@ -41,11 +41,18 @@ jobs:
 
       - name: Run preview server and Playwright smoke test
         run: |
-          nohup npm run preview -- --port 5173 >/dev/null 2>&1 &
-          npx wait-on http://localhost:5173 --timeout 60000
-          npx playwright test tests/smoke/ipc-note-lifecycle.spec.js --config=playwright.config.js
+          nohup npm run preview -- --port 5173 --host 127.0.0.1 > preview.log 2>&1 &
+          npx wait-on http://127.0.0.1:5173 --timeout 60000
+          npx playwright test tests/smoke/ipc-note-lifecycle.spec.js --config=playwright.config.js || (echo "Playwright failed"; exit 1)
         env:
           CI: 'true'
+
+      - name: Upload preview log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-log
+          path: preview.log
 
       - name: Upload Playwright report on failure
         if: failure()
