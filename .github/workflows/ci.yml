@@ -40,9 +40,9 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Start Vite dev server (background)
-        run: npm run dev &
+        run: npm run dev:web &
         env:
-          VITE_DEV_SERVER_URL: ''
+          ELECTRON: 'false'
 
       - name: Wait for dev server
         run: npx wait-on http://127.0.0.1:5173 --timeout 60000

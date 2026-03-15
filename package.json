@@ -6,6 +6,7 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
+    "dev:web": "cross-env ELECTRON=false vite",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck",
@@ -30,7 +31,10 @@
     "asar": true,
     "compression": "maximum",
     "win": {
-      "target": ["appx", "nsis"]
+      "target": [
+        "appx",
+        "nsis"
+      ]
     },
     "appx": {
       "identityName": "51074JacobMollan.Notara",
@@ -38,11 +42,16 @@
       "publisherDisplayName": "Jacob Mollan"
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "category": "public.app-category.productivity"
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "category": "Utility"
     }
   },
@@ -59,12 +68,14 @@
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
     "@types/node": "^20.17.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.4.0",
     "concurrently": "^9.1.0",
+    "cross-env": "^10.1.0",
     "electron": "^41.0.2",
     "electron-builder": "^26.8.1",
     "esbuild": "^0.27.4",
@@ -74,7 +85,6 @@
     "vite": "^8.0.0",
     "vite-plugin-electron": "^0.28.0",
     "vite-plugin-electron-renderer": "^0.14.0",
-    "wait-on": "^8.0.0",
-    "@playwright/test": "^1.44.0"
+    "wait-on": "^8.0.0"
   }
 }
