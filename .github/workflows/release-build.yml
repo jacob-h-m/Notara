@@ -68,13 +68,16 @@ jobs:
       - name: Collect installer files into one directory
         run: |
           mkdir -p release
-          find artifacts -type f \( \
-            -name '*.exe' -o -name '*.msi' -o -name '*.appx' -o \
-            -name '*.msix' -o -name '*.dmg' -o -name '*.AppImage' -o \
-            -name '*.deb' -o -name '*.rpm' -o -name '*.zip' \
-          \) -exec cp {} release/ \;
+          echo 'Artifacts tree:'
+          find artifacts -type f -maxdepth 6 -print || true
+          echo 'Copying installer files into release/ (verbose)'
+          find artifacts -type f \(
+            -iname '*.exe' -o -iname '*.msi' -o -iname '*.appx' -o 
+            -iname '*.msix' -o -iname '*.dmg' -o -iname '*.appimage' -o 
+            -iname '*.deb' -o -iname '*.rpm' -o -iname '*.zip' 
+          \) -exec cp -v {} release/ \; || true
           echo 'Collected files:'
-          ls -lh release/
+          ls -la release/ || (echo 'No installer files were collected' && exit 1)
 
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1
