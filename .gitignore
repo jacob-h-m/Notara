@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-electron/
+out/
+release/
+
+# Test artifacts
+tests/
+test-results/
+playwright-report/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Runtime user data
+state.json
+noteMetadata.json
+notes/*.md
+notes/*.txt
+notes/attachments/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env and local settings
+.env
+.env.*
+!.env.example

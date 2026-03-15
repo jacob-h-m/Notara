@@ -1,0 +1,42 @@
+name: Build release artifacts on tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Build renderer and app
+        run: |
+          npm run build
+
+      - name: Build native installers
+        run: |
+          # electron-builder will build platform-specific artifacts on the matching runner
+          npx electron-builder --publish never
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ matrix.os }}
+          path: release/**/*
