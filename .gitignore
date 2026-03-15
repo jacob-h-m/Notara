@@ -39,3 +39,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Private tools
+tools/make-icons.js
