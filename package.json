@@ -33,6 +33,7 @@
     "win": {
       "target": [
         "appx",
+        "msix",
         "nsis"
       ]
     },
