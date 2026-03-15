@@ -7,8 +7,9 @@ dist-electron/
 out/
 release/
 
-# Test artifacts
-tests/
+# Test artifacts — ignore generated outputs but keep source test files
+tests/screenshots/
+tests/visual/diagnose-output/
 test-results/
 playwright-report/
 
