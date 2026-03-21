@@ -1,0 +1,40 @@
+name: Publicize source (clean)
+
+# Triggered manually from the Actions UI.
+# Produces a tar.gz of the source tree with dev-only directories stripped,
+# suitable for attaching to a release instead of GitHub's auto-generated zip.
+on:
+  workflow_dispatch:
+
+jobs:
+  publicize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create public source archive
+        run: |
+          tar -czf public-source.tar.gz \
+            --exclude=./.git \
+            --exclude=./tools \
+            --exclude=./tests \
+            --exclude=./assets/store/raw \
+            --exclude=./scripts \
+            --exclude=./.github \
+            --exclude=./.venv \
+            --exclude=./dist \
+            --exclude=./dist-electron \
+            --exclude=./release \
+            --exclude=./release-temp \
+            --exclude=./node_modules \
+            .
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-source
+          path: public-source.tar.gz
+          retention-days: 30

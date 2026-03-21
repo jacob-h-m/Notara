@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    // Ensure common types are loaded by the editor/tsserver
+    "types": ["node", "react", "react-dom", "electron"],
+    // "typeRoots": ["./node_modules/@types", "./node_modules"],
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "include": ["src", "electron", "scripts"],
+  "exclude": ["node_modules", "dist", "dist-electron"]
+}

@@ -1,0 +1,23 @@
+# Exclude development tooling, tests, and raw assets from GitHub-generated archives
+/tools/ export-ignore
+/tools/** export-ignore
+/tests/ export-ignore
+/tests/** export-ignore
+/scripts/ export-ignore
+/.github/ export-ignore
+/assets/store/raw/ export-ignore
+/assets/store/raw/** export-ignore
+/tools/python/fonts/ export-ignore
+public-source.* export-ignore
+public-source.tar.gz export-ignore
+public-source.zip export-ignore
+/.venv/ export-ignore
+.npmignore export-ignore
+.github/workflows/* export-ignore
+# Exclude common image assets not required for builds
+assets/*.png export-ignore
+assets/icon*.png export-ignore
+assets/icon-*.png export-ignore
+assets/icon.png export-ignore
+assets/icon.ico export-ignore
+assets/store/** export-ignore
