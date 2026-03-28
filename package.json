@@ -69,7 +69,7 @@
     "win": {
       "target": [
         "nsis",
-        "portable"
+        "zip"
       ],
       "icon": "assets/generated/icons/icon.ico",
       "verifyUpdateCodeSignature": false,
