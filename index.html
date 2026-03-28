@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Content Security Policy: all resources must be local (no external network).
+      'unsafe-inline' for styles is required by CodeMirror and Tailwind's JIT.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file: blob:; media-src 'self' file: blob:;"
+    />
+    <title>Notara</title>
+    <!-- Prevent flash of unstyled/white background before CSS loads and show boot splash -->
+    <style>
+      html,
+      body,
+      #root {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #080b0e;
+      }
+      /* Boot splash styling — removed by src/boot-splash.ts once app is ready */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--app-bg, #080b0e);
+        z-index: 9999;
+      }
+      #boot-splash .inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+      }
+      #boot-splash img {
+        width: 64px;
+        height: 64px;
+      }
+      #boot-splash.is-hidden {
+        opacity: 0;
+        transition: opacity 0.22s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot-splash">
+      <div class="inner">
+        <img src="./logo.svg" alt="Notara" />
+        <div id="boot-splash-label">Loading Notara…</div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!--
+      Safety net: if the ES module graph fails to load for any reason
+      (e.g. a Vite/CSP issue in dev mode), this plain script ensures the
+      boot-splash is always removed so the user is never stuck indefinitely.
+      It fires after 6 seconds — well after the normal 700 ms path — so it
+      only activates when something has truly gone wrong.
+    -->
+    <script>
+      ;(function () {
+        setTimeout(function () {
+          try {
+            var s = document.getElementById('boot-splash')
+            if (s && s.parentNode) s.parentNode.removeChild(s)
+          } catch (e) {}
+          try {
+            var r = document.getElementById('root')
+            if (r) r.style.opacity = '1'
+          } catch (e) {}
+        }, 6000)
+      })()
+    </script>
+  </body>
+</html>

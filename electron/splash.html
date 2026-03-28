@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Notara</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      /* Make splash non-interactive and non-selectable so it behaves like a native window, not a web page */
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: #fff;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          Arial,
+          sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        pointer-events: none;
+      }
+      .inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      img {
+        width: 72px;
+        height: 72px;
+        -webkit-user-drag: none;
+        user-drag: none;
+        pointer-events: none;
+      }
+      .label {
+        font-size: 14px;
+        opacity: 0.9;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="inner">
+      <img src="../assets/logo.svg" alt="Notara" />
+      <div class="label" id="status-label">Starting Notara…</div>
+      <div
+        style="
+          width: 260px;
+          height: 10px;
+          background: rgba(255, 255, 255, 0.06);
+          border-radius: 8px;
+          overflow: hidden;
+          margin-top: 8px;
+        "
+      >
+        <div
+          id="progress"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          data-p="4"
+          style="
+            width: 4%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.28);
+            transition: width 200ms ease;
+          "
+        ></div>
+      </div>
+    </div>
+    <script>
+      // Ensure background matches BrowserWindow background (main sets it too)
+      ;(function () {
+        try {
+          document.body.style.background = document.body.style.background || 'transparent'
+        } catch (e) {}
+      })()
+      // Gentle shimmer animation for perceived progress
+      try {
+        const el = document.getElementById('progress')
+        if (el) {
+          el.style.backgroundImage =
+            'linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.22))'
+        }
+      } catch (e) {}
+      // Cycle through loading status messages for user feedback
+      try {
+        const msgs = [
+          'Starting Notara\u2026',
+          'Loading renderer\u2026',
+          'Preparing editor\u2026',
+          'Restoring session\u2026',
+          'Almost ready\u2026',
+        ]
+        let mi = 0
+        const lbl = document.getElementById('status-label')
+        if (lbl) {
+          setInterval(function () {
+            mi = Math.min(mi + 1, msgs.length - 1)
+            lbl.textContent = msgs[mi]
+          }, 1200)
+        }
+      } catch (e) {}
+    </script>
+  </body>
+</html>

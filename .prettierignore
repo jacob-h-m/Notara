@@ -1,0 +1,9 @@
+dist
+dist-electron
+node_modules
+build
+release
+.user-data
+coverage
+test-results
+*.config.js
