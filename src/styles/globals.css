@@ -1,0 +1,1541 @@
+/* src/styles/globals.css
+   Global stylesheet for Notara.
+   Tailwind CSS base + utility layers, then custom overrides.
+   Import this once in src/main.tsx. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Semantic theme tokens ─────────────────────────────────────────────────── */
+/* Set data-theme="dark|light" on <html> to switch themes.                      */
+
+:root,
+[data-theme='dark'] {
+  /* Use the light theme UI font as the application default */
+  --ui-font: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Named surface backgrounds */
+  --app-bg: #080b0e;
+  --titlebar-bg: #05060a;
+  --sidebar-bg: #08090d;
+  --sidebar-fg: #e2eaf4;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-hover-fg: #f4f8ff;
+  --sidebar-active-bg: rgba(139, 92, 246, 0.2);
+  --sidebar-active-fg: #ffffff;
+  --sidebar-rail-bg: #05060a;
+  --editor-bg: #0c1014;
+  --preview-bg: #0c1014;
+  --modal-bg: #0f1115;
+  --surface-elevated: #1b1f24;
+
+  /* Text */
+  --text-primary: #e2eaf4;
+  --text-muted: #7a8fa5;
+  --text-accent: #a78bfa;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-muted: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Accent */
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-muted: rgba(139, 92, 246, 0.15);
+
+  /* Interactive */
+  --btn-ghost-hover: rgba(255, 255, 255, 0.06);
+  --btn-ghost-active: rgba(255, 255, 255, 0.1);
+  --toolbar-bg: #05060a;
+  --toolbar-fg: #e2eaf4;
+  --toolbar-hover-bg: rgba(255, 255, 255, 0.08);
+  --toolbar-hover-fg: #ffffff;
+  --selection-bg: rgba(139, 92, 246, 0.28);
+
+  /* Editor chrome */
+  --editor-gutter-bg: #141820;
+  --editor-line-active: rgba(255, 255, 255, 0.035);
+
+  /* Destructive */
+  --destructive: #f87171;
+  --destructive-muted: rgba(248, 113, 113, 0.12);
+
+  /* Dirty indicator (unsaved) */
+  --dirty: #f59e0b;
+  --dirty-muted: rgba(245, 158, 11, 0.12);
+
+  /* Hover / shadow */
+  --hover-overlay: rgba(255, 255, 255, 0.04);
+  --hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+
+  /* Hover semantic tokens — explicit foreground+background for deterministic contrast */
+  --hover-bg: rgba(255, 255, 255, 0.08);
+  --hover-text: #e2eaf4;
+  --hover-border: rgba(255, 255, 255, 0.14);
+
+  /* Icon color tokens */
+  --icon-color: #7a8fa5;
+  --icon-hover-color: #e2eaf4;
+  --icon-active-color: #8b5cf6;
+
+  /* Backwards-compat aliases so older component classes still resolve */
+  --surface-950: #05060a;
+  --surface-900: #0c1014;
+  --surface-800: #1b1f24;
+  --surface-700: #252930;
+  --surface-600: #2e3440;
+  --muted-border: rgba(255, 255, 255, 0.09);
+  --accent-violet: #8b5cf6;
+  /* On-accent text color (foreground for accent-filled controls) */
+  --on-accent: #ffffff;
+  /* Switch knob color (configurable for light/dark themes) */
+  --switch-knob: #ffffff;
+}
+
+[data-theme='light'] {
+  /* Named surface backgrounds */
+  --app-bg: #edeef2;
+  --titlebar-bg: #ffffff;
+  --sidebar-bg: #f0f1f5;
+  --sidebar-fg: #111827;
+  --sidebar-hover-bg: rgba(0, 0, 0, 0.1);
+  --sidebar-hover-fg: #020617;
+  --sidebar-active-bg: rgba(124, 58, 237, 0.16);
+  --sidebar-active-fg: #1f1147;
+  --sidebar-rail-bg: #e8eaee;
+  --editor-bg: #ffffff;
+  --preview-bg: #fafbfc;
+  --modal-bg: #ffffff;
+  --surface-elevated: #e5e7eb;
+
+  /* Text */
+  --text-primary: #111827;
+  --text-muted: #6b7280;
+  --text-accent: #7c3aed;
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-muted: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.18);
+
+  /* Accent */
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-muted: rgba(124, 58, 237, 0.12);
+
+  /* Interactive */
+  --btn-ghost-hover: rgba(0, 0, 0, 0.05);
+  --btn-ghost-active: rgba(0, 0, 0, 0.09);
+  --toolbar-bg: #ffffff;
+  --toolbar-fg: #111827;
+  --toolbar-hover-bg: rgba(0, 0, 0, 0.1);
+  --toolbar-hover-fg: #020617;
+  --selection-bg: rgba(124, 58, 237, 0.18);
+
+  /* Editor chrome */
+  --editor-gutter-bg: #f0f2f5;
+  --editor-line-active: rgba(0, 0, 0, 0.03);
+
+  /* Destructive */
+  --destructive: #dc2626;
+  --destructive-muted: rgba(220, 38, 38, 0.1);
+
+  /* Dirty indicator (unsaved) */
+  --dirty: #d97706;
+  --dirty-muted: rgba(217, 119, 6, 0.12);
+
+  /* Hover / shadow */
+  --hover-overlay: rgba(0, 0, 0, 0.04);
+  --hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Hover semantic tokens — explicit foreground+background for deterministic contrast */
+  --hover-bg: rgba(0, 0, 0, 0.07);
+  --hover-text: #111827;
+  --hover-border: rgba(0, 0, 0, 0.18);
+
+  /* Icon color tokens */
+  --icon-color: #6b7280;
+  --icon-hover-color: #111827;
+  --icon-active-color: #7c3aed;
+
+  /* Backwards-compat aliases */
+  --surface-950: #f0f1f5;
+  --surface-900: #ffffff;
+  --surface-800: #e5e7eb;
+  --surface-700: #d1d5db;
+  --surface-600: #9ca3af;
+  --muted-border: rgba(0, 0, 0, 0.1);
+  --accent-violet: #7c3aed;
+  /* On-accent text color (foreground for accent-filled controls) */
+  --on-accent: #ffffff;
+  /* Switch knob color (configurable for light/dark themes) */
+  --switch-knob: #ffffff;
+}
+
+[data-contrast='high'] {
+  --text-primary: #ffffff;
+  --text-muted: #d7dbe0;
+  --border-subtle: rgba(255, 255, 255, 0.22);
+  --border-muted: rgba(255, 255, 255, 0.3);
+  --border-strong: rgba(255, 255, 255, 0.45);
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.16);
+  --sidebar-active-bg: rgba(139, 92, 246, 0.34);
+  --btn-ghost-hover: rgba(255, 255, 255, 0.14);
+  --btn-ghost-active: rgba(255, 255, 255, 0.22);
+  --input-focus-ring: rgba(255, 255, 255, 0.42);
+}
+
+[data-theme='light'][data-contrast='high'] {
+  --text-primary: #0a0f18;
+  --text-muted: #1d2736;
+  --border-subtle: rgba(0, 0, 0, 0.32);
+  --border-muted: rgba(0, 0, 0, 0.42);
+  --border-strong: rgba(0, 0, 0, 0.55);
+  --sidebar-hover-bg: rgba(0, 0, 0, 0.14);
+  --sidebar-active-bg: rgba(109, 40, 217, 0.26);
+  --btn-ghost-hover: rgba(0, 0, 0, 0.12);
+  --btn-ghost-active: rgba(0, 0, 0, 0.2);
+  --input-focus-ring: rgba(0, 0, 0, 0.26);
+}
+
+/* ─── Reset & root ──────────────────────────────────────────────────────────── */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--text-primary);
+  font-family: var(--ui-font, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  /* Disable browser-style text selection across the whole UI shell */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Re-enable selection where users actually need it */
+input,
+textarea,
+select,
+.ProseMirror {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ─── Named surface utilities ───────────────────────────────────────────────── */
+
+.bg-surface-950 {
+  background-color: var(--surface-950) !important;
+}
+.bg-surface-900 {
+  background-color: var(--surface-900) !important;
+}
+.bg-surface-800 {
+  background-color: var(--surface-800) !important;
+}
+.bg-surface-700 {
+  background-color: var(--surface-700) !important;
+}
+.bg-surface-600 {
+  background-color: var(--surface-600) !important;
+}
+
+.bg-app {
+  background-color: var(--app-bg) !important;
+}
+.bg-titlebar {
+  background-color: var(--titlebar-bg) !important;
+}
+.bg-sidebar {
+  background-color: var(--sidebar-bg) !important;
+}
+.bg-editor {
+  background-color: var(--editor-bg) !important;
+}
+.bg-preview {
+  background-color: var(--preview-bg) !important;
+}
+.bg-modal {
+  background-color: var(--modal-bg) !important;
+}
+
+.text-on-surface {
+  color: var(--text-primary) !important;
+}
+.text-muted {
+  color: var(--text-muted) !important;
+}
+.text-accent {
+  color: var(--accent) !important;
+}
+.bg-dirty {
+  background-color: var(--dirty) !important;
+}
+
+.border-muted {
+  border-color: var(--border-muted) !important;
+}
+.border-subtle {
+  border-color: var(--border-subtle) !important;
+}
+.ring-muted {
+  box-shadow: 0 0 0 1px var(--border-muted) inset !important;
+}
+
+/* ─── Button system ─────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.4375rem 0.75rem;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  white-space: nowrap;
+  -webkit-app-region: no-drag;
+}
+.btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Button hover / active use theme tokens */
+.btn:hover {
+  background: var(--btn-hover-bg);
+}
+.btn:active {
+  background: var(--btn-active-bg);
+}
+
+/* Accessible focus ring for interactive sidebar rows and tabs */
+.sidebar-shell .group:focus-within,
+.sidebar-shell .group:focus {
+  outline: none;
+}
+.sidebar-shell .group:focus-visible,
+.note-row:focus-visible,
+.sidebar-shell button:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* Primary — filled accent */
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent, #fff);
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+.btn-primary:active {
+  filter: brightness(0.92);
+}
+
+/* Ghost — no background */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: transparent;
+}
+.btn-ghost:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.btn-ghost:active {
+  background: var(--btn-ghost-active);
+}
+
+/* Subtle — light border */
+.btn-subtle {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-muted);
+}
+.btn-subtle:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.btn-subtle:active {
+  background: var(--btn-ghost-active);
+}
+
+/* Destructive */
+.btn-destructive {
+  background: var(--destructive-muted);
+  color: var(--destructive);
+  border-color: transparent;
+}
+.btn-destructive:hover {
+  background: color-mix(in srgb, var(--destructive) 20%, transparent);
+}
+.btn-destructive:active {
+  filter: brightness(0.92);
+}
+
+/* Toggle — stateful icon/label button */
+.btn-toggle {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: 0.3125rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+.btn-toggle:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.btn-toggle[data-active='true'],
+.btn-toggle.active {
+  color: var(--accent);
+}
+.btn-toggle[data-active='true']:hover,
+.btn-toggle.active:hover {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+
+/* Icon-only — square */
+.btn-icon {
+  background: transparent;
+  color: var(--text-muted);
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid transparent;
+  padding: 0;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.btn-icon svg {
+  display: block;
+}
+.btn-icon:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.btn-icon:active {
+  background: var(--btn-ghost-active);
+}
+.btn-icon:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* ─── Field (input / select) ────────────────────────────────────────────────── */
+
+.field {
+  background: var(--surface-800);
+  color: var(--text-primary);
+  border: 1px solid var(--border-muted);
+  border-radius: 0.375rem;
+  height: 1.875rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  outline: none;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.field:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Use new focus ring token when available */
+.field:focus {
+  box-shadow: 0 0 0 4px var(--input-focus-ring, rgba(0, 0, 0, 0.06));
+}
+
+/* ─── Switch (toggle) ────────────────────────────────────────────────────────── */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: background 200ms ease;
+}
+.switch[aria-checked='false'] {
+  background: var(--surface-700);
+}
+.switch[aria-checked='true'] {
+  background: var(--accent);
+}
+.switch:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background: var(--switch-knob, #fff);
+  box-shadow: var(--hover-shadow);
+  transition: transform 200ms ease;
+}
+.switch[aria-checked='true']::after {
+  transform: translateX(1rem);
+}
+
+/* ─── Sidebar shell animation ───────────────────────────────────────────────── */
+
+.sidebar-shell {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint;
+  will-change: width;
+  transition:
+    width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease;
+}
+.sidebar-shell.is-open {
+  width: 15rem;
+}
+.sidebar-shell.is-collapsed {
+  width: 3rem;
+}
+
+/* Tab bar (editor tabs) — driven by theme tokens */
+.tab-bar {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--tab-bg);
+}
+.tab-bar .tab-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border-subtle);
+  /* Reserve 2px top slot so active/inactive tabs share the same box height */
+  border-top: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+.tab-bar .tab-item:hover {
+  background: var(--tab-hover-bg);
+  color: var(--text-primary);
+}
+.tab-bar .tab-item.active {
+  background: var(--tab-active-bg);
+  color: var(--text-on-surface, var(--text-primary));
+  border-top: 2px solid var(--tab-active-border);
+}
+/* Feature 13/21: Drag insertion indicator */
+.tab-bar .tab-item {
+  position: relative;
+}
+.tab-bar .tab-item.drag-over::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+.tab-bar .tab-item.drag-over {
+  background: var(--surface-700);
+}
+
+/* Feature 17: Tab loading skeleton */
+.tab-bar .tab-item.loading {
+  animation: tab-pulse 1s ease-in-out infinite alternate;
+}
+@keyframes tab-pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Editor container scrollbar */
+.tiptap-editor-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.tiptap-editor-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tiptap-editor-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+.tiptap-editor-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+.tiptap-editor-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Search icon specific styling: ensure no glyph/text fallback shows */
+.search-icon {
+  display: block;
+  width: 12px;
+  height: 12px;
+  line-height: 0;
+}
+.search-icon path,
+.search-icon circle {
+  vector-effect: non-scaling-stroke;
+}
+
+/* ─── TipTap WYSIWYG editor prose styles ───────────────────────────────────── */
+/* The .ProseMirror div is TipTap's contenteditable root.                        */
+/* .tiptap-prose is applied via editorProps.attributes.class in Editor.tsx.      */
+
+.ProseMirror {
+  outline: none;
+  min-height: 100%;
+  color: var(--text-primary);
+  font-family: var(--ui-font);
+  line-height: 1.75;
+  caret-color: var(--accent);
+}
+
+/* Selected text highlight */
+.ProseMirror ::selection {
+  background: var(--selection-bg);
+}
+
+/* ── Block elements ── */
+.tiptap-prose h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0.6em 0 0.3em;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+.tiptap-prose h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 0.7em 0 0.3em;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.tiptap-prose h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.tiptap-prose p {
+  margin: 0.4em 0;
+}
+
+.tiptap-prose blockquote {
+  border-left: 3px solid var(--accent);
+  margin: 0.8em 0;
+  padding: 0.4em 1em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.tiptap-prose ul {
+  margin: 0.4em 0;
+  padding-left: 1.6em;
+  list-style-type: disc;
+}
+.tiptap-prose ol {
+  margin: 0.4em 0;
+  padding-left: 1.6em;
+  list-style-type: decimal;
+}
+.tiptap-prose li {
+  margin: 0.15em 0;
+}
+.tiptap-prose li p {
+  margin: 0;
+}
+
+/* Task list — target via the ul which reliably has data-type="taskList" */
+.ProseMirror ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0.4em;
+}
+/* The li is created by TipTap's NodeView (no data-type attr in live DOM),
+   so we target it as a direct child of the taskList ul instead. */
+.ProseMirror ul[data-type='taskList'] > li {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start;
+  gap: 0.5em;
+  margin: 0.2em 0;
+  list-style: none !important;
+}
+.ProseMirror ul[data-type='taskList'] > li > label {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 0.2em;
+}
+.ProseMirror ul[data-type='taskList'] > li > label input[type='checkbox'] {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  vertical-align: middle;
+}
+.ProseMirror ul[data-type='taskList'] > li > div {
+  flex: 1;
+  min-width: 0;
+}
+.ProseMirror ul[data-type='taskList'] > li > div > p {
+  margin: 0;
+  display: inline !important;
+}
+.ProseMirror ul[data-type='taskList'] > li[data-checked='true'] > div {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* Code */
+.tiptap-prose code {
+  font-family: var(--code-font);
+  font-size: 0.875em;
+  background: var(--surface-elevated, rgba(255, 255, 255, 0.07));
+  border: 1px solid var(--border-muted);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  color: var(--text-accent, #a78bfa);
+}
+.tiptap-prose pre {
+  background: var(--editor-gutter-bg, #141820);
+  border: 1px solid var(--border-muted);
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  margin: 0.8em 0;
+}
+.tiptap-prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 0.875em;
+}
+
+/* Links */
+.tiptap-prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.tiptap-prose a:hover {
+  color: var(--accent-hover, #7c3aed);
+}
+
+/* Images */
+.tiptap-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0.4em 0;
+}
+
+/* Horizontal rule */
+.tiptap-prose hr {
+  border: none;
+  border-top: 1px solid var(--border-muted);
+  margin: 1.2em 0;
+}
+
+/* Tables */
+.tiptap-prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8em 0;
+}
+.tiptap-prose th,
+.tiptap-prose td {
+  border: 1px solid var(--border-muted);
+  padding: 0.4em 0.7em;
+  text-align: left;
+}
+.tiptap-prose th {
+  background: var(--editor-gutter-bg, #141820);
+  font-weight: 600;
+}
+.tiptap-prose td {
+  background: transparent;
+}
+
+/* Focused cell highlight in tables */
+.tiptap-prose .selectedCell:after {
+  background: var(--selection-bg);
+  content: '';
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+.tiptap-prose td,
+.tiptap-prose th {
+  position: relative;
+}
+
+/* Word wrap off — prevent text from wrapping in WYSIWYG mode */
+.tiptap-nowrap {
+  overflow-x: auto !important;
+}
+.tiptap-nowrap .ProseMirror {
+  white-space: pre !important;
+}
+
+/* TipTap editor wrapper scrollbar */
+.ProseMirror-focused {
+  outline: none;
+}
+[class*='tiptap'] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+[class*='tiptap'] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+[class*='tiptap'] ::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+[class*='tiptap'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Light theme overrides for prose */
+[data-theme='light'] .tiptap-prose pre {
+  background: #f3f4f6;
+}
+[data-theme='light'] .tiptap-prose code {
+  background: rgba(0, 0, 0, 0.05);
+  color: #7c3aed;
+}
+[data-theme='light'] .tiptap-prose th {
+  background: #f3f4f6;
+}
+
+.sidebar-expanded-pane {
+  width: 15rem;
+  flex-shrink: 0;
+  color: var(--sidebar-fg, var(--text-primary));
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  transition:
+    opacity 170ms ease,
+    transform 170ms ease,
+    visibility 0ms linear 0ms;
+}
+.sidebar-shell.is-collapsed .sidebar-expanded-pane {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-0.65rem);
+  transition:
+    opacity 120ms ease,
+    transform 140ms ease,
+    visibility 0ms linear 140ms;
+}
+
+.sidebar-rail-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.375rem;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 140ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  color: var(--sidebar-fg, var(--text-primary));
+}
+.sidebar-shell.is-open .sidebar-rail-pane {
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  pointer-events: none;
+}
+
+.sidebar-shell.is-collapsed {
+  box-shadow: inset -1px 0 0 var(--border-subtle);
+}
+
+.reduced-motion .sidebar-shell,
+.reduced-motion .sidebar-expanded-pane,
+.reduced-motion .sidebar-rail-pane {
+  transition: none !important;
+}
+
+/* Hover contrast for sidebar rows and buttons — use semantic hover tokens */
+.sidebar-expanded-pane button:hover,
+.sidebar-shell button:hover,
+.note-row:hover {
+  background: var(--sidebar-hover-bg, var(--hover-bg));
+  color: var(--sidebar-hover-fg, var(--hover-text));
+}
+
+.note-item-active {
+  background: var(--sidebar-active-bg, var(--surface-800));
+  color: var(--sidebar-active-fg, var(--text-primary));
+}
+
+/* ─── Icon utilities ──────────────────────────────────────────────────────── */
+
+/* Icons are purely decorative — prevent selection and dragging */
+svg {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Icon color utility classes */
+.icon-base {
+  color: var(--icon-color);
+}
+.icon-hover {
+  color: var(--icon-hover-color);
+}
+.icon-active {
+  color: var(--icon-active-color);
+}
+
+/* Buttons with icons: icon inherits button color by default */
+.btn-icon svg,
+.footer-toggle svg,
+.titlebar-btn svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Improve modal rendering performance: contain paint/layout and reduce heavy shadow */
+.settings-modal.modal-card {
+  contain: layout paint;
+  will-change: transform, opacity;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* ─── Titlebar styles ───────────────────────────────────────────────────────── */
+
+.titlebar {
+  -webkit-app-region: drag;
+}
+.titlebar .no-drag {
+  -webkit-app-region: no-drag;
+}
+.titlebar .drag-region {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure interactive controls in app-menu / titlebar are not treated as drag */
+.app-menu-bar button,
+.titlebar .btn-icon,
+.titlebar-btn,
+.titlebar .titlebar-menu button {
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-btn {
+  -webkit-app-region: no-drag;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 5px 7px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
+}
+.titlebar-btn:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.titlebar-btn:active {
+  background: var(--btn-ghost-active);
+  color: var(--text-primary);
+}
+.titlebar-btn.close:hover {
+  background: var(--destructive-muted);
+  color: var(--destructive);
+}
+.titlebar-btn.close:active {
+  background: color-mix(in srgb, var(--destructive-muted) 160%, transparent);
+  color: var(--destructive);
+}
+
+/* Titlebar layout helpers */
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.titlebar-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.titlebar-brand:hover {
+  background: color-mix(in srgb, var(--hover-overlay) 60%, transparent);
+}
+.titlebar-brand img {
+  -webkit-app-region: no-drag;
+  -webkit-user-drag: none;
+}
+/* Ensure logo image itself cannot be used to drag the window or be dragged */
+.titlebar-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 6px;
+}
+.titlebar-menu > * {
+  margin-left: 6px;
+}
+
+.titlebar-controls {
+  gap: 6px;
+}
+.titlebar-controls .titlebar-btn {
+  width: 36px;
+  height: 28px;
+  padding: 6px;
+  border-radius: 6px;
+}
+.titlebar-controls .titlebar-btn svg {
+  display: block;
+}
+.titlebar-controls .titlebar-btn.close {
+  color: var(--text-muted);
+}
+.titlebar-controls .titlebar-btn.close:hover {
+  color: var(--destructive);
+  background: var(--destructive-muted);
+}
+
+/* Modal card subtle entrance */
+.modal-card {
+  background: var(--modal-bg);
+  border: 1px solid var(--border-subtle);
+  /* lighter, cheaper shadow */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-4px) scale(0.998);
+  opacity: 0;
+  transition:
+    transform 120ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    opacity 120ms ease;
+}
+.modal-card:focus {
+  outline: none;
+}
+.fixed.inset-0.z-50 .modal-card,
+.settings-modal.modal-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Settings nav focus */
+.settings-tab:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* Make the center title visually subtler and avoid pointer events */
+.titlebar .drag-region span {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Ensure menu content is marked no-drag (if consumer forgot) */
+.titlebar-menu,
+.titlebar-left,
+.titlebar-controls {
+  -webkit-app-region: no-drag;
+}
+
+/* Footer / bottom utility strip */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 1.625rem;
+  background: var(--titlebar-bg);
+  border-top: 1px solid var(--border-subtle);
+  gap: 8px;
+}
+.app-footer-left,
+.app-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.footer-info {
+  color: var(--text-muted);
+}
+.app-footer-right {
+  gap: 8px;
+}
+.footer-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+  -webkit-app-region: no-drag;
+}
+.footer-toggle:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.footer-toggle[data-active='true'] {
+  color: var(--accent);
+}
+.footer-toggle:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.footer-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border-strong);
+  opacity: 0.9;
+  margin: 0 8px;
+}
+
+/* Respect reduced motion */
+.reduced-motion .app-footer,
+.reduced-motion .footer-toggle {
+  transition: none !important;
+}
+
+/* ─── Loading overlay ──────────────────────────────────────────────────────── */
+
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Slight translucent veil using the theme background to avoid abrupt contrast */
+  background: color-mix(in srgb, var(--app-bg) 94%, transparent);
+  /* Block interactions while loading */
+  pointer-events: all;
+}
+.app-loading-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.app-loading-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: loading-dot 1.4s ease-in-out infinite;
+}
+.app-loading-dots span:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.app-loading-dots span:nth-child(3) {
+  animation-delay: 0.44s;
+}
+@keyframes loading-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.75);
+  }
+  40% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+}
+.reduced-motion .app-loading-dots span {
+  animation: none;
+  opacity: 0.5;
+}
+
+/* ─── Scrollbars (WebKit / Blink) ───────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-700);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-600);
+}
+
+/* Input / textarea placeholders */
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* ─── App menu bar ──────────────────────────────────────────────────────────── */
+
+.app-menu-bar {
+  -webkit-app-region: no-drag;
+}
+
+/* Dropdown slide-in animation */
+.menu-dropdown {
+  animation: menu-fade-in 100ms ease;
+  transform-origin: top left;
+}
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── Settings modal animation ──────────────────────────────────────────────── */
+
+.settings-modal {
+  animation: modal-pop-in 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modal-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modal-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Settings modal card & backdrop polish */
+.backdrop-backdrop {
+  background: rgba(0, 0, 0, 0.42); /* removed backdrop-filter to reduce repaints */
+  will-change: opacity;
+}
+.modal-card {
+  background: var(--modal-bg);
+  border: 1px solid var(--border-subtle);
+}
+
+.settings-nav {
+  background: var(--app-bg);
+  border-right: 1px solid var(--border-subtle);
+}
+.settings-nav-title {
+  margin-bottom: 0.375rem;
+  padding-left: 1rem;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.settings-tab {
+  display: block;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    transform 120ms ease;
+}
+.settings-tab:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+.settings-tab:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.settings-tab[data-active='true'] {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.settings-header {
+  border-bottom: 1px solid var(--border-subtle);
+}
+.settings-header-title {
+  margin: 0;
+}
+.settings-close {
+  color: var(--text-muted);
+}
+.settings-close:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+
+.settings-content {
+  padding-bottom: 18px;
+}
+
+/* Improve section titles and spacing inside modal */
+.settings-modal h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-muted);
+}
+.settings-modal p {
+  color: var(--text-muted);
+}
+
+/* Form field visual adjustments for the modal */
+.settings-modal .field {
+  background: var(--surface-elevated);
+  border-color: var(--border-muted);
+}
+.settings-modal .field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-muted);
+}
+
+/* Button sizing within modal */
+.settings-modal .btn {
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.625rem;
+}
+.settings-modal .btn-subtle {
+  border-radius: 0.5rem;
+}
+.settings-modal .btn-destructive {
+  border-radius: 0.5rem;
+}
+
+/* Theme cards: enhance contrast and layout without changing inline health colors */
+.settings-modal .rounded-xl {
+  box-shadow: 0 1px 0 0 color-mix(in srgb, var(--border-subtle) 60%, transparent);
+}
+
+/* Focus ring for interactive rows */
+.settings-modal button:focus,
+.settings-modal [role='switch']:focus {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* ─── Reduced motion overrides ──────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-dropdown,
+  .settings-modal,
+  .titlebar-btn,
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.reduced-motion *,
+.high-contrast .menu-dropdown,
+.high-contrast .settings-modal {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+/* ─── Tab bar scrollbar — hidden track, minimal thumb ────────────────────────── */
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Sidebar polish utilities */
+.text-destructive {
+  color: var(--destructive) !important;
+}
+.bg-destructive-muted {
+  background: var(--destructive-muted) !important;
+}
+.text-dirty {
+  color: var(--dirty) !important;
+}
+.border-destructive-muted {
+  border-color: var(--destructive-muted) !important;
+}
+.text-destructive-muted {
+  color: var(--destructive-muted) !important;
+}
+.ring-accent {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+  border-color: var(--accent);
+}
+
+/* Sidebar specifics */
+.sidebar .field {
+  background: var(--surface-800);
+}
+
+/* Ensure small icon buttons in sidebar use semantic hover */
+.sidebar .btn-icon:hover {
+  background: var(--btn-ghost-hover);
+  color: var(--text-primary);
+}
+
+/* ─── Markdown toolstrip (right-side vertical strip) ────────────────────────── */
+.md-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  width: 32px;
+  min-width: 32px;
+  flex-shrink: 0;
+  background: var(--toolbar-bg);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.md-strip::-webkit-scrollbar {
+  display: none;
+}
+.md-strip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--icon-color);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition:
+    background 0.12s,
+    color 0.12s;
+  flex-shrink: 0;
+}
+.md-strip-btn:hover {
+  background: var(--toolbar-hover-bg);
+  color: var(--toolbar-hover-fg);
+}
+.md-strip-btn:active {
+  background: var(--btn-ghost-active);
+}
+.md-strip-sep {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 3px 4px;
+}

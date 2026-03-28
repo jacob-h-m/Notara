@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+    # Optionally ignore specific dependencies here
+    # ignore:
+    #   - dependency-name: "some-package"
+    #     update-types: ["version-update:semver-minor"]

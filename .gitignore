@@ -1,0 +1,126 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Build outputs ─────────────────────────────────────────────────────────────
+dist/
+dist-electron/
+dist-electron-tmp-*/
+release/
+*.tsbuildinfo
+
+# ── Vite cache ────────────────────────────────────────────────────────────────
+.vite/
+vite.config.ts.timestamp*
+
+# ── Test coverage output ──────────────────────────────────────────────────────
+coverage/
+
+# ── User data and local runtime state (never commit) ──────────────────────────
+.user-data/
+data/
+state.json
+noteMetadata.json
+notes/
+themes/
+
+# ── Test artifacts (generated output — not source files) ──────────────────────
+test-results/
+playwright-report/
+tests/screenshots/
+tests/visual/diagnose-output/
+
+# ── Local-only / non-CI Playwright specs ─────────────────────────────────────
+# CI only runs tests/visual/critical.spec.js (pr-smoke.yml).
+# The specs below are local diagnostic/screenshot-generation tools; they write
+# to disk (diagnose-output/, assets/store/, notes/) and are not safe for CI.
+tests/visual/diagnose.spec.js
+tests/visual/screenshot.spec.js
+tests/visual/real-screens.spec.js
+tests/visual/full-pass.spec.js
+# features.spec.js has genuine feature coverage and is safe to keep public
+# tests/a11y/ and tests/perf/ are local-only (no CI workflow runs them)
+tests/a11y/
+tests/perf/
+
+# ── IDE / editor ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# ── Python tooling (dev only, not runtime) ────────────────────────────────────
+.venv/
+__pycache__/
+
+# ── Dev-only tools and raw store assets ───────────────────────────────────────
+tools/
+assets/store/raw/
+
+# ── Local-only scripts (release tooling / recovery — not needed by contributors or CI) ──
+scripts/recover_files.bat
+scripts/copy_recovered.ps1
+scripts/make-msix.ps1
+scripts/make_public_copy.sh
+scripts/make_public_copy.ps1
+
+# ── Personal / local AI agent data ────────────────────────────────────────────
+.claude/
+
+# ── One-off audit and analysis artifacts ──────────────────────────────────────
+depcheck.json
+knip-report.json
+madge.json
+ts-prune.txt
+extracted-app/
+# Stale ESLint config (replaced by eslint.config.js)
+.eslintrc.json
+.eslintrc.js
+.eslintrc.cjs
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+
+# ── Assets: track only source assets and CI-required generated files ──────────
+# Ignore all generated/store assets by default.
+assets/generated/icons/icon-16.png
+assets/generated/icons/icon-32.png
+assets/generated/icons/icon-48.png
+assets/generated/icons/icon-64.png
+assets/generated/icons/icon-128.png
+assets/generated/icons/icon-256.png
+assets/generated/icons/icon-512.png
+assets/generated/installer/header-banner.png
+assets/generated/installer/option-dark.png
+assets/generated/installer/option-light.png
+assets/generated/installer/setupfiles.png
+assets/generated/installer/side-panel.png
+assets/generated/metadata/
+assets/generated/screenshots/
+assets/generated/splash/
+assets/generated/store/
+assets/store/
+assets/icon.ico
+# Source logo and marketing banner are tracked
+!assets/logo.svg
+!assets/banner-1280x640.png
+# The following generated files ARE tracked — electron-builder requires them
+# by exact path during CI packaging:
+#   icon.ico / icon.icns → Windows + macOS installer icons
+#   icon-1024.png        → Linux package icon
+#   _notara.iconset/     → macOS DMG icon (iconutil runs on CI)
+#   side-panel.bmp       → NSIS installer sidebar graphic

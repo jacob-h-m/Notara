@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Notara MSIX Manifest for Microsoft Store
+
+  IMPORTANT: Update Version below to match package.json version on each release.
+  Use 4-part format: major.minor.patch.0 (e.g. 1.0.3.0 for package version 1.0.3)
+
+  MATCH THESE WITH YOUR MICROSOFT STORE IDENTITY
+  Find values in Partner Center > Apps > Notara > App management > App identity
+
+  Package Name:       51074JacobMollan.Notara
+  Publisher CN:       CN=10EDC7E2-241A-4F52-8B94-FD44EDF80BBF
+  Publisher Display:  Jacob Mollan
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="rescap">
+
+  <Identity
+    Name="51074JacobMollan.Notara"
+    Publisher="CN=10EDC7E2-241A-4F52-8B94-FD44EDF80BBF"
+    Version="1.0.2.0"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Notara</DisplayName>
+    <PublisherDisplayName>Jacob Mollan</PublisherDisplayName>
+    <Description>Minimal, distraction-free note-taking with Markdown preview and tabbed editing.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Notara" Executable="Notara.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Notara"
+        Description="Minimal, distraction-free note-taking with Markdown preview and tabbed editing."
+        BackgroundColor="#13131A"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+
+</Package>

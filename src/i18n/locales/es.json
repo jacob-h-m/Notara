@@ -1,0 +1,211 @@
+{
+  "sidebar": {
+    "searchPlaceholder": "Buscar notas…",
+    "clearSearch": "Limpiar búsqueda",
+    "collapseSidebar": "Contraer barra lateral",
+    "newNote": "+ Nueva nota",
+    "pinned": "Fijadas",
+    "notes": "Notas",
+    "tags": "Etiquetas",
+    "noTagsHint": "Sin etiquetas. Agrega #hashtags a tus notas.",
+    "noNotesHint": "Sin notas aún.\nHaz clic en + Nueva nota para empezar.",
+    "noMatchesHint": "Sin coincidencias.",
+    "clearFilter": "Limpiar filtro",
+    "noteCount_one": "{{count}} nota",
+    "noteCount_other": "{{count}} notas",
+    "knowledgeGraph": "Grafo de conocimiento",
+    "settings": "Configuración",
+    "pin": "Fijar arriba",
+    "unpin": "Desfijar",
+    "rename": "Renombrar",
+    "delete": "Eliminar",
+    "open": "Abrir",
+    "moveToNewWindow": "Mover a nueva ventana",
+    "confirmDelete": "Confirmar eliminación",
+    "cancelDelete": "Cancelar"
+  },
+  "editor": {
+    "noTabsOpen": "Sin notas abiertas",
+    "openNoteHint": "Selecciona una nota de la barra lateral o crea una nueva.",
+    "recentFiles": "Recientes",
+    "dropTabHere": "Soltar pestaña aquí",
+    "closeTab": "Cerrar {{filename}}",
+    "pinTab": "Fijar pestaña",
+    "unpinTab": "Desfijar pestaña",
+    "openInSplit": "Abrir en división",
+    "wordCount": "{{words}} palabras, {{chars}} caracteres"
+  },
+  "slashMenu": {
+    "placeholder": "Buscar comandos…",
+    "noResults": "Sin comandos coincidentes.",
+    "groups": {
+      "text": "Texto",
+      "lists": "Listas",
+      "blocks": "Bloques"
+    },
+    "commands": {
+      "h1": "Encabezado 1",
+      "h1Desc": "Encabezado de sección grande",
+      "h2": "Encabezado 2",
+      "h2Desc": "Encabezado de sección mediano",
+      "h3": "Encabezado 3",
+      "h3Desc": "Encabezado de sección pequeño",
+      "bullet": "Lista con viñetas",
+      "bulletDesc": "Lista no ordenada",
+      "ordered": "Lista numerada",
+      "orderedDesc": "Lista ordenada",
+      "task": "Lista de tareas",
+      "taskDesc": "Lista con casillas",
+      "quote": "Cita en bloque",
+      "quoteDesc": "Bloque de cita",
+      "code": "Bloque de código",
+      "codeDesc": "Código preformateado",
+      "divider": "Separador",
+      "dividerDesc": "Línea horizontal",
+      "table": "Tabla",
+      "tableDesc": "Tabla de 3 columnas"
+    }
+  },
+  "versionHistory": {
+    "title": "Historial de versiones",
+    "noVersions": "Sin versiones guardadas.",
+    "noVersionsHint": "Las versiones se crean automáticamente al guardar (Ctrl+S).",
+    "loading": "Cargando…",
+    "versions_one": "{{count}} versión",
+    "versions_other": "{{count}} versiones",
+    "restore": "Restaurar",
+    "delete": "Eliminar",
+    "preview": "vista previa",
+    "diff": "diferencias",
+    "truncatedHint": "Vista previa truncada — {{count}} caracteres en total. Restaura para ver el contenido completo.",
+    "restoreTitle": "Restaurar versión",
+    "restoreConfirm": "¿Restaurar la versión de {{label}}?\n\nEl contenido actual será reemplazado."
+  },
+  "backlinks": {
+    "linkedFrom": "Enlazado desde",
+    "linksTo": "Enlaza a",
+    "noBacklinks": "Ninguna nota enlaza a {{name}} todavía.",
+    "noOutgoing": "Sin enlaces salientes.",
+    "outgoingHint": "Usa [[Nombre de nota]] para enlazar notas."
+  },
+  "attachments": {
+    "title": "Adjuntos",
+    "empty": "Sin adjuntos aún.",
+    "import": "Importar archivo…",
+    "verify": "Verificar",
+    "open": "Abrir",
+    "delete": "Eliminar",
+    "allOk": "Todos los adjuntos verificados.",
+    "errors": "{{count}} adjunto(s) faltante(s) o corruptos."
+  },
+  "search": {
+    "placeholder": "Buscar en todas las notas…",
+    "noResults": "Sin resultados para \"{{query}}\".",
+    "hint": "Escribe para buscar en el contenido de todas las notas."
+  },
+  "settings": {
+    "title": "Configuración",
+    "close": "Cerrar configuración",
+    "tabs": {
+      "general": "General",
+      "editor": "Editor",
+      "rendering": "Renderizado",
+      "appearance": "Apariencia",
+      "language": "Idioma",
+      "tags": "Etiquetas",
+      "privacy": "Privacidad",
+      "export": "Exportar / Importar",
+      "keybindings": "Atajos",
+      "about": "Acerca de"
+    },
+    "general": {
+      "notes": "Notas",
+      "newNoteFormat": "Formato de nueva nota",
+      "newNoteFormatDesc": "Tipo de archivo al crear una nota",
+      "autosaveSpeed": "Velocidad de autoguardado",
+      "autosaveSpeedDesc": "Con qué rapidez se guardan los cambios automáticamente",
+      "storage": "Almacenamiento",
+      "notesFolder": "Carpeta de notas",
+      "notesFolderDesc": "Abrir la carpeta donde se guardan tus notas",
+      "openFolder": "Abrir carpeta",
+      "session": "Sesión",
+      "reopenLastSession": "Reabrir última sesión",
+      "reopenLastSessionDesc": "Restaurar pestañas abiertas al iniciar",
+      "openLastNote": "Abrir última nota al iniciar",
+      "openDroppedNotes": "Abrir notas soltadas en nueva ventana",
+      "openDroppedNotesDesc": "Al soltar archivos .md/.txt, cada uno se abre en una ventana dedicada"
+    },
+    "appearance": {
+      "theme": "Tema",
+      "dark": "Oscuro",
+      "light": "Claro",
+      "system": "Sistema",
+      "themeEditor": "Editor de tema",
+      "themeEditorDesc": "Edita los colores del tema {{mode}} actual. Los cambios se aplican al instante — haz clic en Guardar para persistir.",
+      "saveTheme": "Guardar tema",
+      "saving": "Guardando…",
+      "saved": "✓ Guardado"
+    },
+    "language": {
+      "heading": "Idioma de la interfaz",
+      "desc": "Elige el idioma de visualización de la aplicación.",
+      "select": "Idioma",
+      "restartHint": "Los cambios de idioma se aplican de inmediato."
+    },
+    "tags": {
+      "heading": "Todas las etiquetas",
+      "desc": "Las etiquetas se derivan de los #hashtags en tus notas.",
+      "empty": "Sin etiquetas. Agrega #hashtags a las notas para verlas aquí.",
+      "filterBy": "Filtrar notas por #{{tag}}",
+      "noteCount_one": "{{count}} nota",
+      "noteCount_other": "{{count}} notas",
+      "searchPlaceholder": "Buscar etiquetas…"
+    },
+    "editor": {
+      "display": "Pantalla",
+      "fontSize": "Tamaño de fuente",
+      "indentSize": "Tamaño de sangría",
+      "indentSizeDesc": "Espacios por nivel de sangría",
+      "features": "Funciones",
+      "wordWrap": "Ajuste de línea",
+      "lineNumbers": "Números de línea",
+      "wordCount": "Conteo de palabras",
+      "previewByDefault": "Mostrar vista previa por defecto",
+      "spellcheck": "Corrección ortográfica",
+      "spellcheckDesc": "Subrayar en rojo las palabras mal escritas"
+    },
+    "privacy": {
+      "confirmDelete": "Confirmar antes de eliminar",
+      "confirmDeleteDesc": "Mostrar diálogo de confirmación antes de eliminar permanentemente",
+      "reset": "Restablecer",
+      "resetApp": "Restablecer estado de la app…",
+      "resetDesc": "Borra pestañas abiertas, notas fijadas y configuración. Las notas en disco no se ven afectadas.",
+      "confirmReset": "Confirmar restablecimiento",
+      "cancel": "Cancelar",
+      "privacyStatement": "Declaración de privacidad",
+      "privacyText": "Notara es completamente local. Ningún dato se envía a ningún servidor. Las notas, configuración y temas se almacenan solo en tu dispositivo. No hay telemetría, análisis ni cuenta requerida."
+    },
+    "about": {
+      "version": "Versión {{version}}",
+      "createdBy": "Creado por",
+      "productPage": "Página del producto ↗",
+      "github": "GitHub ↗",
+      "tagline": "Solo local. Sin nube. Sin cuentas. Sin telemetría."
+    },
+    "keybindings": {
+      "hint": "Haz clic en un atajo para reasignarlo. Presiona una nueva combinación de teclas para aplicar.",
+      "resetAll": "Restablecer todo",
+      "pressKey": "Presiona una tecla…"
+    }
+  },
+  "common": {
+    "loading": "Cargando…",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "rename": "Renombrar",
+    "open": "Abrir"
+  }
+}

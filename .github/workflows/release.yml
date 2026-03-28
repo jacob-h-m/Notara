@@ -1,0 +1,224 @@
+name: Build & Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build (leave blank for all)'
+        required: false
+        default: 'all'
+        type: choice
+        options: ['all', 'windows', 'macos', 'linux']
+  push:
+    tags:
+      - 'v*.*.*'
+
+# Only one release workflow runs at a time per ref.
+# cancel-in-progress: false ensures a running release build is never aborted by
+# a subsequent tag push — each tag gets its own complete run.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ── Windows: NSIS installer + portable exe ────────────────────────────────
+  build-windows:
+    name: Build Windows (NSIS + portable)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'windows' }}
+    runs-on: windows-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck electron
+        run: npx tsc -p tsconfig.electron.json --noEmit
+
+      - name: Build renderer + electron
+        run: npm run build
+
+      - name: Build Windows installers (NSIS + portable)
+        # package.json win.target is [nsis, portable] so one call produces both.
+        run: npx electron-builder --win --x64 --config.packageManager=npm --publish never
+        env:
+          CSC_KEY_PASSWORD: ''
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: |
+            release/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
+  # ── macOS: DMG (Intel + Apple Silicon) ────────────────────────────────────
+  build-macos:
+    name: Build macOS (DMG x64 + arm64)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'macos' }}
+    runs-on: macos-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck electron
+        run: npx tsc -p tsconfig.electron.json --noEmit
+
+      - name: Build renderer + electron
+        run: npm run build
+
+      - name: Build macOS installers (x64 + arm64 in one pass)
+        # electron-builder resolves both arches from package.json mac.target config.
+        run: npx electron-builder --mac --x64 --arm64 --config.packageManager=npm --publish never
+        env:
+          CSC_KEY_PASSWORD: ''
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifacts
+          path: |
+            release/*.dmg
+            release/*.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  # ── Linux: AppImage + deb ─────────────────────────────────────────────────
+  build-linux:
+    name: Build Linux (AppImage + deb)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'linux' }}
+    # Pin to ubuntu-22.04: ubuntu-24.04 (ubuntu-latest) ships fuse3 only, but
+    # electron-builder's AppImageTool requires libfuse2 to mount AppImages during
+    # packaging. ubuntu-22.04 has libfuse2 pre-installed.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck electron
+        run: npx tsc -p tsconfig.electron.json --noEmit
+
+      - name: Build renderer + electron
+        run: npm run build
+
+      - name: Build Linux packages (AppImage + deb)
+        # Targets come from package.json linux.target ([AppImage, deb]).
+        # No --config.linux.target override needed — one call builds all of them.
+        run: npx electron-builder --linux --x64 --config.packageManager=npm --publish never
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: |
+            release/*.AppImage
+            release/*.deb
+          if-no-files-found: error
+          retention-days: 14
+
+  # ── GitHub Release ────────────────────────────────────────────────────────
+  create-release:
+    name: Create GitHub Release
+    needs: [build-windows, build-macos, build-linux]
+    # Only create a release when triggered by a version tag. If workflow_dispatch
+    # is used on a branch (e.g. for testing the build jobs), skip this job so we
+    # don't accidentally create a garbage "Notara main" release.
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Collect release files
+        shell: bash
+        run: |
+          mkdir -p release-final
+          find artifacts/ -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.zip" \) \
+            -exec cp -n {} release-final/ \;
+          echo "=== Release contents ==="
+          ls -lh release-final/
+          ARTIFACT_COUNT=$(find release-final/ -type f | wc -l)
+          if [ "$ARTIFACT_COUNT" -eq 0 ]; then
+            echo "ERROR: No release artifacts collected. Check build job logs."
+            exit 1
+          fi
+          echo "Collected $ARTIFACT_COUNT artifacts."
+
+      - name: Build release notes
+        id: notes
+        run: |
+          {
+            echo 'release_body<<EOF'
+            echo '## Download'
+            echo ''
+            echo '| Platform | File |'
+            echo '|----------|------|'
+            echo '| Windows  | `.exe` NSIS installer or portable `.exe` |'
+            echo '| macOS    | `.dmg` installer or `.zip` archive (Intel x64 + Apple Silicon arm64) |'
+            echo '| Linux    | `.AppImage` or `.deb` package |'
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        # ncipollo/release-action v1.14.0
+        # SHA: 440c952f9a2d691e95f19eefa2c08b3f303d2ba0
+        uses: ncipollo/release-action@440c952f9a2d691e95f19eefa2c08b3f303d2ba0
+        with:
+          tag: ${{ github.ref_name }}
+          name: Notara ${{ github.ref_name }}
+          body: ${{ steps.notes.outputs.release_body }}
+          draft: true
+          prerelease: false
+          artifacts: release-final/*
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          token: ${{ secrets.GITHUB_TOKEN }}

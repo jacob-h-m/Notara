@@ -1,0 +1,198 @@
+{
+  "name": "notara",
+  "version": "1.0.2",
+  "author": "Jacob Mollan",
+  "description": "Notara v2 — local-only desktop notes app",
+  "main": "dist-electron/main.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build:electron": "node scripts/build-electron-safe.js",
+    "build:electron:watch": "npx esbuild ./electron/main.ts ./electron/preload.ts --bundle --platform=node --outdir=dist-electron --external:electron --format=cjs --watch=forever",
+    "build": "tsc -p tsconfig.renderer.json --noEmit && vite build && npm run build:electron",
+    "typecheck": "tsc -p tsconfig.renderer.json --noEmit",
+    "typecheck:electron": "tsc -p tsconfig.electron.json --noEmit",
+    "typecheck:all": "npm run typecheck && npm run typecheck:electron",
+    "verify": "npm run typecheck:all && npm run lint && npm run test:unit && npm run build",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "test:unit": "vitest run",
+    "electron:dev": "node scripts/start-electron-dev.js",
+    "electron:build": "npm run build && electron-builder",
+    "release:win": "npm run build && npx electron-builder --win --x64 --config.packageManager=npm --publish never",
+    "test:visual:install": "npx playwright install chromium",
+    "test:visual": "npx playwright test --config=playwright.config.js",
+    "test:a11y": "npx playwright test tests/a11y --config=playwright.config.js",
+    "test:perf": "npx playwright test tests/perf --config=playwright.config.js",
+    "test:e2e": "npx playwright install chromium && concurrently -k \"npm:dev\" \"npx wait-on http://127.0.0.1:5173 && npx playwright test tests/visual/critical.spec.js --config=playwright.config.js\"",
+    "preview": "vite preview",
+    "prepare": "husky"
+  },
+  "build": {
+    "appId": "com.notara.app",
+    "productName": "Notara",
+    "copyright": "Copyright © 2026 Jacob Mollan",
+    "directories": {
+      "output": "release"
+    },
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "files": [
+      "dist/**",
+      "!dist/generated/**",
+      "!dist/store/**",
+      "dist-electron/main.js",
+      "dist-electron/preload.js",
+      "assets/icon.png"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/generated/icons/icon.ico",
+      "uninstallerIcon": "assets/generated/icons/icon.ico",
+      "installerHeaderIcon": "assets/generated/icons/icon.ico",
+      "installerSidebar": "assets/generated/installer/side-panel.bmp",
+      "uninstallerSidebar": "assets/generated/installer/side-panel.bmp",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Notara",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/generated/icons/icon.ico",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.productivity",
+      "icon": "assets/generated/icons/_notara.iconset",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "notarize": false
+    },
+    "dmg": {
+      "sign": false,
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "icon": "assets/generated/icons/icon-1024.png",
+      "synopsis": "Local-first desktop notes app",
+      "description": "Notara is a fast, local-only notes app with Markdown editing, backlinks, version history, and knowledge graph."
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils"
+      ]
+    }
+  },
+  "dependencies": {
+    "@tiptap/core": "^3.20.4",
+    "@tiptap/extension-image": "^3.20.4",
+    "@tiptap/extension-link": "^3.20.4",
+    "@tiptap/extension-table": "^3.20.4",
+    "@tiptap/extension-table-cell": "^3.20.4",
+    "@tiptap/extension-table-header": "^3.20.4",
+    "@tiptap/extension-table-row": "^3.20.4",
+    "@tiptap/extension-task-item": "^3.20.4",
+    "@tiptap/extension-task-list": "^3.20.4",
+    "@tiptap/react": "^3.20.4",
+    "@tiptap/starter-kit": "^3.20.4",
+    "cytoscape": "^3.33.1",
+    "i18next": "^23.11.5",
+    "marked": "^17.0.5",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-i18next": "^14.1.3",
+    "turndown": "^7.2.2",
+    "turndown-plugin-gfm": "^1.0.2"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.44.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.19.37",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@types/turndown": "^5.0.6",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.0",
+    "autoprefixer": "^10.4.0",
+    "concurrently": "^9.1.0",
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "esbuild": "^0.27.4",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "jsdom": "^24.1.3",
+    "lint-staged": "^16.4.0",
+    "postcss": "^8.4.0",
+    "prettier": "^3.8.1",
+    "rollup-plugin-visualizer": "^7.0.1",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.6.0",
+    "vite": "^8.0.0",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.0",
+    "vitest": "^4.1.0",
+    "wait-on": "^8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,css,mjs}": [
+      "prettier --write"
+    ]
+  }
+}

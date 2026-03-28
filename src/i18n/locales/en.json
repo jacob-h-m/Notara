@@ -1,0 +1,211 @@
+{
+  "sidebar": {
+    "searchPlaceholder": "Search notes…",
+    "clearSearch": "Clear search",
+    "collapseSidebar": "Collapse sidebar",
+    "newNote": "+ New Note",
+    "pinned": "Pinned",
+    "notes": "Notes",
+    "tags": "Tags",
+    "noTagsHint": "No tags yet. Add #hashtags to your notes.",
+    "noNotesHint": "No notes yet.\nClick + New Note to start.",
+    "noMatchesHint": "No matches found.",
+    "clearFilter": "Clear filter",
+    "noteCount_one": "{{count}} note",
+    "noteCount_other": "{{count}} notes",
+    "knowledgeGraph": "Knowledge Graph",
+    "settings": "Settings",
+    "pin": "Pin to top",
+    "unpin": "Unpin",
+    "rename": "Rename",
+    "delete": "Delete",
+    "open": "Open",
+    "moveToNewWindow": "Move to New Window",
+    "confirmDelete": "Confirm delete",
+    "cancelDelete": "Cancel"
+  },
+  "editor": {
+    "noTabsOpen": "No notes open",
+    "openNoteHint": "Select a note from the sidebar or create a new one.",
+    "recentFiles": "Recent",
+    "dropTabHere": "Drop tab here",
+    "closeTab": "Close {{filename}}",
+    "pinTab": "Pin tab",
+    "unpinTab": "Unpin tab",
+    "openInSplit": "Open in split",
+    "wordCount": "{{words}} words, {{chars}} chars"
+  },
+  "slashMenu": {
+    "placeholder": "Search commands…",
+    "noResults": "No commands match.",
+    "groups": {
+      "text": "Text",
+      "lists": "Lists",
+      "blocks": "Blocks"
+    },
+    "commands": {
+      "h1": "Heading 1",
+      "h1Desc": "Large section heading",
+      "h2": "Heading 2",
+      "h2Desc": "Medium section heading",
+      "h3": "Heading 3",
+      "h3Desc": "Small section heading",
+      "bullet": "Bullet List",
+      "bulletDesc": "Unordered list",
+      "ordered": "Numbered List",
+      "orderedDesc": "Ordered list",
+      "task": "Task List",
+      "taskDesc": "Checkbox list",
+      "quote": "Blockquote",
+      "quoteDesc": "Quote block",
+      "code": "Code Block",
+      "codeDesc": "Preformatted code",
+      "divider": "Divider",
+      "dividerDesc": "Horizontal rule",
+      "table": "Table",
+      "tableDesc": "3-column table"
+    }
+  },
+  "versionHistory": {
+    "title": "Version History",
+    "noVersions": "No saved versions yet.",
+    "noVersionsHint": "Versions are created automatically when you save (Ctrl+S).",
+    "loading": "Loading…",
+    "versions_one": "{{count}} version",
+    "versions_other": "{{count}} versions",
+    "restore": "Restore",
+    "delete": "Delete",
+    "preview": "preview",
+    "diff": "diff",
+    "truncatedHint": "Preview truncated — {{count}} chars total. Restore to see full content.",
+    "restoreTitle": "Restore Version",
+    "restoreConfirm": "Restore version from {{label}}?\n\nCurrent content will be replaced."
+  },
+  "backlinks": {
+    "linkedFrom": "Linked from",
+    "linksTo": "Links to",
+    "noBacklinks": "No notes link to {{name}} yet.",
+    "noOutgoing": "No outgoing links.",
+    "outgoingHint": "Use [[Note Name]] to link notes."
+  },
+  "attachments": {
+    "title": "Attachments",
+    "empty": "No attachments yet.",
+    "import": "Import file…",
+    "verify": "Verify",
+    "open": "Open",
+    "delete": "Delete",
+    "allOk": "All attachments verified.",
+    "errors": "{{count}} attachment(s) missing or corrupt."
+  },
+  "search": {
+    "placeholder": "Search all notes…",
+    "noResults": "No results for \"{{query}}\".",
+    "hint": "Type to search across all note content."
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "tabs": {
+      "general": "General",
+      "editor": "Editor",
+      "rendering": "Rendering",
+      "appearance": "Appearance",
+      "language": "Language",
+      "tags": "Tags",
+      "privacy": "Privacy",
+      "export": "Export / Import",
+      "keybindings": "Keybindings",
+      "about": "About"
+    },
+    "general": {
+      "notes": "Notes",
+      "newNoteFormat": "New note format",
+      "newNoteFormatDesc": "File type used when creating a note",
+      "autosaveSpeed": "Autosave speed",
+      "autosaveSpeedDesc": "How quickly changes are saved automatically",
+      "storage": "Storage",
+      "notesFolder": "Notes folder",
+      "notesFolderDesc": "Open the folder where your notes are stored",
+      "openFolder": "Open folder",
+      "session": "Session",
+      "reopenLastSession": "Reopen last session",
+      "reopenLastSessionDesc": "Restore open tabs on launch",
+      "openLastNote": "Open last note on launch",
+      "openDroppedNotes": "Open dropped notes in new window",
+      "openDroppedNotesDesc": "When dropping .md/.txt files into the app, open each in a dedicated window"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System",
+      "themeEditor": "Theme Editor",
+      "themeEditorDesc": "Edit key color tokens for the current {{mode}} theme. Changes apply instantly — click Save to persist.",
+      "saveTheme": "Save theme",
+      "saving": "Saving…",
+      "saved": "✓ Saved"
+    },
+    "language": {
+      "heading": "Interface Language",
+      "desc": "Choose the display language for the application.",
+      "select": "Language",
+      "restartHint": "Language changes apply immediately."
+    },
+    "tags": {
+      "heading": "All Tags",
+      "desc": "Tags are derived from #hashtags in your notes.",
+      "empty": "No tags found. Add #hashtags to notes to see them here.",
+      "filterBy": "Filter notes by #{{tag}}",
+      "noteCount_one": "{{count}} note",
+      "noteCount_other": "{{count}} notes",
+      "searchPlaceholder": "Search tags…"
+    },
+    "editor": {
+      "display": "Display",
+      "fontSize": "Font size",
+      "indentSize": "Indent size",
+      "indentSizeDesc": "Spaces per indentation level",
+      "features": "Features",
+      "wordWrap": "Word wrap",
+      "lineNumbers": "Line numbers",
+      "wordCount": "Word count",
+      "previewByDefault": "Show preview by default",
+      "spellcheck": "Spellcheck",
+      "spellcheckDesc": "Show red underlines for misspelled words in the editor"
+    },
+    "privacy": {
+      "confirmDelete": "Confirm before deleting a note",
+      "confirmDeleteDesc": "Show a confirmation dialog before permanently deleting",
+      "reset": "Reset",
+      "resetApp": "Reset app state…",
+      "resetDesc": "Clears open tabs, pinned notes, and settings. Notes on disk are not affected.",
+      "confirmReset": "Confirm reset",
+      "cancel": "Cancel",
+      "privacyStatement": "Privacy Statement",
+      "privacyText": "Notara is entirely local. No data is ever sent to any server. Notes, settings, and themes are stored only on your device. There is no telemetry, no analytics, and no account required."
+    },
+    "about": {
+      "version": "Version {{version}}",
+      "createdBy": "Created by",
+      "productPage": "Product page ↗",
+      "github": "GitHub ↗",
+      "tagline": "Local-only. No cloud. No accounts. No telemetry."
+    },
+    "keybindings": {
+      "hint": "Click a key binding to reassign it. Press a new key combination to apply.",
+      "resetAll": "Reset All",
+      "pressKey": "Press a key…"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "rename": "Rename",
+    "open": "Open"
+  }
+}
