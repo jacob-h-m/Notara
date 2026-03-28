@@ -209,9 +209,9 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
-        # ncipollo/release-action v1.14.0
-        # SHA: 440c952f9a2d691e95f19eefa2c08b3f303d2ba0
-        uses: ncipollo/release-action@440c952f9a2d691e95f19eefa2c08b3f303d2ba0
+        # ncipollo/release-action v1.21.0
+        # SHA: 339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
           tag: ${{ github.ref_name }}
           name: Notara ${{ github.ref_name }}
