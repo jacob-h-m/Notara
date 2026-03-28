@@ -112,6 +112,7 @@
         "AppImage",
         "deb"
       ],
+      "maintainer": "Jacob Mollan",
       "category": "Utility",
       "icon": "assets/generated/icons/icon-1024.png",
       "synopsis": "Local-first desktop notes app",
