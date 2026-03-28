@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  build/entitlements.mac.plist
+  macOS Hardened Runtime entitlements for Notara.
+
+  Required for App Store submission and notarization.
+  Grants only the minimum permissions the app actually needs.
+-->
+<plist version="1.0">
+  <dict>
+    <!-- Allow JIT compilation — needed by Electron's V8 engine -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+
+    <!-- Allow unsigned executable memory — needed by Electron -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!-- Disable library validation — required for Electron's bundled libraries -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+
+    <!-- Read/write access to user-selected files (notes folder, attachments) -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!-- Downloads folder access (for saving exported PDFs) -->
+    <key>com.apple.security.files.downloads.read-write</key>
+    <true/>
+
+  </dict>
+</plist>

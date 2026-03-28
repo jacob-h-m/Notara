@@ -1,0 +1,34 @@
+# Exclude development tooling, tests, and raw assets from published packages
+/node_modules
+/dist
+/dist-electron
+/release
+/release-temp
+/.github
+/.vscode
+/.venv
+/tests
+/build
+/tools
+/assets/store
+/assets/generated
+/scripts
+/coverage
+/test-results
+/playwright-report
+/*.log
+*.local
+*.env
+.env.*
+.DS_Store
+.eslintrc.json
+.eslintrc.js
+depcheck.json
+knip-report.json
+madge.json
+ts-prune.txt
+
+# Keep package metadata
+package.json
+README.md
+LICENSE

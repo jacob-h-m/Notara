@@ -1,0 +1,37 @@
+name: Dependency Audit
+
+on:
+  schedule:
+    - cron: '0 5 * * 1' # weekly on Monday at 05:00 UTC
+  workflow_dispatch:
+
+jobs:
+  npm-audit:
+    name: Run npm audit (high/critical)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Run npm audit (high + critical only)
+        # npm audit reads package-lock.json directly — no install needed.
+        # Fails the job only on high/critical to avoid noise from transitive
+        # devDependency churn at lower severity levels.
+        run: |
+          npm audit --audit-level=high --json | tee audit-report.json \
+            || (echo "⚠ High/critical vulnerabilities found — see audit-report.json" && exit 1)
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+          retention-days: 30
