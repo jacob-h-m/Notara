@@ -51,7 +51,7 @@ jobs:
 
       - name: Build Windows installers (NSIS + portable)
         # package.json win.target is [nsis, portable] so one call produces both.
-        run: npx electron-builder --win --x64 --config.packageManager=npm --publish never
+        run: npx electron-builder --win --x64 --publish never
         env:
           CSC_KEY_PASSWORD: ''
           CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -95,7 +95,7 @@ jobs:
 
       - name: Build macOS installers (x64 + arm64 in one pass)
         # electron-builder resolves both arches from package.json mac.target config.
-        run: npx electron-builder --mac --x64 --arm64 --config.packageManager=npm --publish never
+        run: npx electron-builder --mac --x64 --arm64 --publish never
         env:
           CSC_KEY_PASSWORD: ''
           CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -144,7 +144,7 @@ jobs:
       - name: Build Linux packages (AppImage + deb)
         # Targets come from package.json linux.target ([AppImage, deb]).
         # No --config.linux.target override needed — one call builds all of them.
-        run: npx electron-builder --linux --x64 --config.packageManager=npm --publish never
+        run: npx electron-builder --linux --x64 --publish never
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
