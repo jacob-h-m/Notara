@@ -131,7 +131,7 @@
   "dependencies": {
     "@tiptap/core": "^3.20.4",
     "@tiptap/extension-image": "^3.20.4",
-    "@tiptap/extension-link": "^3.20.4",
+    "@tiptap/extension-link": "^3.21.0",
     "@tiptap/extension-table": "^3.20.4",
     "@tiptap/extension-table-cell": "^3.20.4",
     "@tiptap/extension-table-header": "^3.20.4",
