@@ -196,51 +196,50 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.ref_name }}
         run: |
-          NOTES=$(cat <<'NOTES_EOF'
-            ## Notara v1.0.2 — Initial Release
+          cat > release-notes.md << 'EOF'
+          ## Notara v1.0.2 — Initial Release
 
-            Notara is a local-first desktop notes app. Your notes are plain Markdown files on your own machine — no accounts, no cloud, no sync service required.
+          Notara is a local-first desktop notes app. Your notes are plain Markdown files on your own machine — no accounts, no cloud, no sync service required.
 
-            ### What's included
+          ### What's included
 
-            **Editor**
-            - WYSIWYG Markdown editor with heading, list, table, task list, link, and image support
-            - Raw Markdown side-pane you can toggle open at any time
-            - Slash command menu for quick block insertion
-            - Find and replace — scoped to the current note or across every note at once
+          **Editor**
+          - WYSIWYG Markdown editor with heading, list, table, task list, link, and image support
+          - Raw Markdown side-pane you can toggle open at any time
+          - Slash command menu for quick block insertion
+          - Find and replace — scoped to the current note or across every note at once
 
-            **Organisation**
-            - Tags — add tags to notes via the inline tag bar, filter by tag in the sidebar, rename or delete tags globally from Settings
-            - Backlinks panel showing every note that links to the one you're reading
-            - Knowledge graph view of your note connections
-            - Full-text search across all notes
+          **Organisation**
+          - Tags — add tags to notes via the inline tag bar, filter by tag in the sidebar, rename or delete tags globally from Settings
+          - Backlinks panel showing every note that links to the one you're reading
+          - Knowledge graph view of your note connections
+          - Full-text search across all notes
 
-            **Workflow**
-            - Tabbed editing — open multiple notes, drag tabs to reorder, drag tabs between windows
-            - Autosave with configurable delay, plus manual save
-            - Session restore — your open tabs come back exactly as you left them
-            - Version history per note with one-click restore
-            - Attachments — import, open, verify, and delete files attached to a note
-            - Multi-window support — move notes to a dedicated window or merge them all back
+          **Workflow**
+          - Tabbed editing — open multiple notes, drag tabs to reorder, drag tabs between windows
+          - Autosave with configurable delay, plus manual save
+          - Session restore — your open tabs come back exactly as you left them
+          - Version history per note with one-click restore
+          - Attachments — import, open, verify, and delete files attached to a note
+          - Multi-window support — move notes to a dedicated window or merge them all back
 
-            **Customisation**
-            - Light and dark themes, plus custom theme file support
-            - Remappable shortcuts via Settings - Keybindings; the menu bar updates instantly
-            - Adjustable font size, word wrap, tab width, and word count display
+          **Customisation**
+          - Light and dark themes, plus custom theme file support
+          - Remappable shortcuts via Settings - Keybindings; the menu bar updates instantly
+          - Adjustable font size, word wrap, tab width, and word count display
 
-            ### Download
+          ### Download
 
-            Windows: Notara-Setup-1.0.2.exe (installer) or Notara-1.0.2-x64.zip (portable)
-            macOS: Notara-1.0.2-x64.dmg (Intel) or Notara-1.0.2-arm64.dmg (Apple Silicon)
-            Linux: Notara-1.0.2-x64.AppImage or Notara-1.0.2-amd64.deb
-            NOTES_EOF
-          )
+          Windows: Notara-Setup-1.0.2.exe (installer) or Notara-1.0.2-x64.zip (portable)
+          macOS: Notara-1.0.2-x64.dmg (Intel) or Notara-1.0.2-arm64.dmg (Apple Silicon)
+          Linux: Notara-1.0.2-x64.AppImage or Notara-1.0.2-amd64.deb
+          EOF
 
           # Delete any existing release attached to this tag (e.g. a stale draft)
           gh release delete "$TAG" --yes 2>/dev/null || true
 
           gh release create "$TAG" release-final/* \
             --title "Notara $TAG" \
-            --notes "$NOTES" \
+            --notes-file release-notes.md \
             --draft \
             --verify-tag
