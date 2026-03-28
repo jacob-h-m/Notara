@@ -425,6 +425,10 @@ function TipTapTabPanel({
     const tid = setTimeout(() => {
       // Re-check inside the timeout since editor may have been destroyed
       if (!editor || editor.isDestroyed) return
+      // Skip if the editor is focused — the user is actively typing and the
+      // incoming initialContent is just their own edit bouncing back through
+      // state. Syncing here would wipe the keystroke they just typed.
+      if (editor.isFocused) return
       // If content diverged from what we last wrote, this is an external change
       if (initialContent !== lastMdRef.current) {
         suppressUpdateRef.current = true
