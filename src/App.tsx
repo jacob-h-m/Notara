@@ -212,7 +212,7 @@ export default function App() {
       })
       return next
     })
-  }, [tabManager.activeTab])  
+  }, [tabManager.activeTab])
 
   // Refresh the open-in-other-windows indicator when tabs change
   const refreshOpenInOtherWindows = useCallback(async () => {
