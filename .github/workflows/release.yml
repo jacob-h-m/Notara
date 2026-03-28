@@ -193,32 +193,40 @@ jobs:
           fi
           echo "Collected $ARTIFACT_COUNT artifacts."
 
-      - name: Build release notes
-        id: notes
+      - name: Create or update GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
         run: |
-          {
-            echo 'release_body<<EOF'
-            echo '## Download'
-            echo ''
-            echo '| Platform | File |'
-            echo '|----------|------|'
-            echo '| Windows  | `.exe` NSIS installer or portable `.exe` |'
-            echo '| macOS    | `.dmg` installer or `.zip` archive (Intel x64 + Apple Silicon arm64) |'
-            echo '| Linux    | `.AppImage` or `.deb` package |'
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
+          NOTES=$(cat <<'NOTES_EOF'
+          ## Changelog
 
-      - name: Create GitHub Release
-        # ncipollo/release-action v1.21.0
-        # SHA: 339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
-        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
-        with:
-          tag: ${{ github.ref_name }}
-          name: Notara ${{ github.ref_name }}
-          body: ${{ steps.notes.outputs.release_body }}
-          draft: true
-          prerelease: false
-          artifacts: release-final/*
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          Initial public release of Notara.
+
+          - Local-first Markdown notes with tabbed editing
+          - Backlinks panel and knowledge graph view
+          - Full-text search
+          - Version history per note
+          - Attachments support
+          - Light and dark themes
+          - Available for Windows, macOS (Intel + Apple Silicon), and Linux
+
+          ## Download
+
+          | Platform | File |
+          |----------|------|
+          | Windows  | `Notara-Setup-*.exe` (installer) or `Notara-*.exe` (portable) |
+          | macOS    | `Notara-*-x64.dmg` (Intel) or `Notara-*-arm64.dmg` (Apple Silicon) |
+          | Linux    | `Notara-*.AppImage` or `Notara-*.deb` |
+          NOTES_EOF
+          )
+
+          # Delete any existing release attached to this tag (e.g. a stale draft)
+          gh release delete "$TAG" --yes 2>/dev/null || true
+
+          gh release create "$TAG" release-final/* \
+            --title "Notara $TAG" \
+            --notes "$NOTES" \
+            --draft \
+            --verify-tag
