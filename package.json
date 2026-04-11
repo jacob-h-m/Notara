@@ -143,7 +143,7 @@
     "@tiptap/react": "^3.20.4",
     "@tiptap/starter-kit": "^3.20.4",
     "cytoscape": "^3.33.1",
-    "i18next": "^23.11.5",
+    "i18next": "^26.0.4",
     "marked": "^17.0.5",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
